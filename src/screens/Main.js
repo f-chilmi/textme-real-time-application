@@ -11,6 +11,7 @@ const BottomTabs = createBottomTabNavigator();
 // import screen
 import Chat from './Chat';
 import ChatRoom from './ChatRoom';
+import Register from './Register';
 
 const MainStack = () => {
   return(
@@ -24,6 +25,11 @@ const MainStack = () => {
         options={{headerShown: false}}
         name="ChatRoom"
         component={ChatRoom}
+      />
+      <Stack.Screen 
+        options={{headerShown: false}}
+        name="Register"
+        component={Register}
       />
     </Stack.Navigator>
   )

@@ -1,16 +1,22 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, TouchableOpacity, ScrollView, Text} from 'react-native';
+import Iconic from 'react-native-vector-icons/MaterialIcons';
 import {Icon} from 'native-base';
 import {Header, Input} from 'react-native-elements';
 
 export default class ChatRoom extends Component {
+  register = () => {
+    this.props.navigation.navigate('Register')
+  }
   render() {
     return (
       <View style={style.parent}>
         <Header 
           placement="left"
           backgroundColor="#f5f5f5"
-          leftComponent={<Icon name='chevron-left' type='FontAwesome' color='#1e90ff' fontSize={10} /> }
+          leftComponent={
+            <Iconic onPress={this.register} name='chevron-left' type='FontAwesome' color='#1e90ff' size={28} />
+          }
           centerComponent={{ text: 'Sender', style: { color: 'black' }, }}
           rightComponent={{ icon: 'call', color: '#1e90ff' }}
         />
@@ -20,12 +26,14 @@ export default class ChatRoom extends Component {
         </ScrollView> */}
 
         <View style={style.bottomWrapper}>
-          <Icon name='plus' fontSize='10' type='FontAwesome' style={style.iconLeft}/>
+          {/* <Icon name='plus' fontSize='10' type='FontAwesome' style={style.iconLeft}/> */}
+          <Iconic name='add' size={25} style={style.iconLeft} />
           <Input 
             containerStyle={style.containerStyle}
             inputStyle={style.inputChat}
           />
-          <Icon name='camera' type='FontAwesome' style={style.iconRight} onPress />
+          <Iconic name='camera-alt' size={28} style={style.iconRight} />
+          {/* <Icon name="camera" type="FontAwesome" style={style.iconRight} /> */}
         </View>
 
 
