@@ -10,6 +10,7 @@ const BottomTabs = createBottomTabNavigator();
 
 // import screen
 import Chat from './Chat';
+import ChatRoom from './ChatRoom';
 
 const MainStack = () => {
   return(
@@ -18,6 +19,11 @@ const MainStack = () => {
         options={{headerShown: false}}
         name="Chat"
         component={Chat}
+      />
+      <Stack.Screen 
+        options={{headerShown: false}}
+        name="ChatRoom"
+        component={ChatRoom}
       />
     </Stack.Navigator>
   )

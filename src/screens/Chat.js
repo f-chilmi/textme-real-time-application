@@ -10,10 +10,10 @@ import {
 import {Icon, Thumbnail} from 'native-base';
 import {SearchBar} from 'react-native-elements';
 
-const Chat = () => {
+const Chat = ({navigation}) => {
   const [search, setSearch] = React.useState('');
   const renderItem = ({item}) => (
-    <TouchableOpacity style={style.rowChat}>
+    <TouchableOpacity style={style.rowChat} onPress={()=>navigation.navigate('ChatRoom')}>
       <View style={style.thumbnailWrap}>
         <Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />
       </View>
