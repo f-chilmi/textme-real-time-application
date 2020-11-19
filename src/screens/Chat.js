@@ -111,7 +111,7 @@ const style = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 27,
+    fontSize: 25,
   },
   inputSearch: {
     fontSize: 12,

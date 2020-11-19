@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {View, StyleSheet, Text, TouchableOpacity, SafeAreaView} from 'react-native'
 import {Header, Input, Button} from 'react-native-elements'
-import Iconic from 'react-native-vector-icons/MaterialIcons';4
+import Iconic from 'react-native-vector-icons/MaterialIcons';
 
 export default class Register extends Component {
   verification = () => {
