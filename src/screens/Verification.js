@@ -3,40 +3,44 @@ import {View, StyleSheet, Text, TouchableOpacity, SafeAreaView} from 'react-nati
 import {Header, Input, Button} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons';4
 
-export default class Register extends Component {
+export default class Verification extends Component {
   verification = () => {
     this.props.navigation.navigate('Verification')
   }
-
+  
   render() {
     return (
       <SafeAreaView style={style.parent}>
         <Header
           backgroundColor="transparent"
-          centerComponent={{ text: 'Masukkan nomor telepon Anda', style: { color: 'black', fontSize: 13 }, }}
+          centerComponent={{ text: 'Verifikasi +62 813 2868 6883', style: { color: 'black', fontSize: 13 }, }}
           rightComponent={<Iconic onPress={this.register} name='more-vert' color='grey' size={28} />}
           centerContainerStyle={{flex: 5}}
         />
         
         <View style={style.rowDir}>
-          <Text style={style.smallText}>TextMe akan mengirimkan SMS untuk memverifikasi nomor telepon Anda.<Text style={style.linkedText}> Berapa nomor saya?</Text></Text>
+          <Text style={style.smallText}>
+            Menunggu pendeteksian SMS secara otomatis yang telah dikirim ke 
+            <Text style={style.textBlack}> +62 813 2868 6883 </Text>
+            <Text style={style.linkedText}> Nomor salah?</Text>
+          </Text>
 
           <View style={style.inputWrapper}>
             <Input 
               containerStyle={style.containerStyle}
               inputStyle={style.inputStyle0}
             />
-            <View style={style.inputDir}>
-              <Input 
-                containerStyle={style.containerStyleLeft}
-                inputStyle={style.inputStyle}
-              />
-              <Input 
-                containerStyle={style.containerStyleRight}
-                inputStyle={style.inputStyle}
-              />
-            </View>
-            <Text style={style.smallText}>Biaya SMS operator telepon mungkin berlaku</Text>
+            
+            <Text style={style.smallText}>Masukkan kode 6 digit</Text>
+          </View>
+
+          <View style={style.wrapRow0}>
+            <Iconic name="chat-bubble" size={23} color="grey" style={style.iconLeft} />
+            <Text style={style.textGrey}>Kirim ulang SMS</Text>
+          </View>
+          <View style={style.wrapRow}>
+            <Iconic name="phone" size={23} color="grey" style={style.iconLeft} />
+            <Text style={style.textGrey}>Panggil saya</Text>
           </View>
 
         </View>
@@ -45,7 +49,6 @@ export default class Register extends Component {
           raised
           title="Lanjut"
           type="outline"
-          onPress={this.verification}
           containerStyle={style.containerStyleButton}
           buttonStyle={style.buttonStyle}
         />
@@ -63,23 +66,29 @@ const style = StyleSheet.create({
   rowDir: {
     paddingTop: 10,
     alignItems: 'center',
+    paddingHorizontal: '5%',
   },
   smallText: {
     fontSize: 11,
     color: 'grey',
     textAlign: 'center',
   },
+  textBlack: {
+    fontWeight: 'bold',
+    fontSize: 11,
+  },
   linkedText: {
     color: '#1e90ff',
     fontSize: 11,
   },
   inputWrapper: {
-    width: '70%',
+    width: '50%',
+    marginBottom: 20
   },
   containerStyle: {
     // backgroundColor: 'yellow',
-    // padding: 2,
-    height: 50,
+    marginTop: 10,
+    height: 70,
   },
   inputStyle0: {
     fontSize: 11,
@@ -92,16 +101,6 @@ const style = StyleSheet.create({
   inputDir: {
     flexDirection: 'row',
   },
-  containerStyleLeft: {
-    width: '25%',
-    // backgroundColor: 'grey',
-    height: 60,
-  },
-  containerStyleRight: {
-    width: '75%',
-    // backgroundColor: 'yellow',
-    height: 60,
-  },
   containerStyleButton: {
     width: '30%',
     height: 40,
@@ -112,5 +111,27 @@ const style = StyleSheet.create({
   buttonStyle: {
     width: '100%',
     height: '100%'
+  },
+  wrapRow: {
+    flexDirection: 'row',
+    width: '100%',
+    // backgroundColor: 'yellow',
+    paddingVertical: 15,
+  },
+  wrapRow0: {
+    flexDirection: 'row',
+    width: '100%',
+    // backgroundColor: 'yellow',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderColor: '#d3d3d3',
+  },
+  textGrey: {
+    fontSize: 11,
+    color: 'grey',
+  },
+  iconLeft: {
+    paddingLeft: 5,
+    marginRight: 20
   },
 })

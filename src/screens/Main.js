@@ -12,6 +12,7 @@ const BottomTabs = createBottomTabNavigator();
 import Chat from './Chat';
 import ChatRoom from './ChatRoom';
 import Register from './Register';
+import Verification from './Verification';
 
 const MainStack = () => {
   return(
@@ -30,6 +31,11 @@ const MainStack = () => {
         options={{headerShown: false}}
         name="Register"
         component={Register}
+      />
+      <Stack.Screen 
+        options={{headerShown: false}}
+        name="Verification"
+        component={Verification}
       />
     </Stack.Navigator>
   )
