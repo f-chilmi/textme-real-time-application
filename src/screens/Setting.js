@@ -22,7 +22,7 @@ const Setting = ({navigation}) => {
       </View>
       <ScrollView>
 
-      <TouchableOpacity style={style.rowChat} >
+      <TouchableOpacity style={style.rowChat} onPress={()=>navigation.navigate('ProfileUser')}>
         <View style={style.thumbnailWrap}>
           <Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />
         </View>

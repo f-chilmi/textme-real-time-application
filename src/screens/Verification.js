@@ -4,8 +4,8 @@ import {Header, Input, Button} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons';4
 
 export default class Verification extends Component {
-  verification = () => {
-    this.props.navigation.navigate('Verification')
+  chat = () => {
+    this.props.navigation.navigate('Chat')
   }
   
   render() {
@@ -51,6 +51,7 @@ export default class Verification extends Component {
           type="outline"
           containerStyle={style.containerStyleButton}
           buttonStyle={style.buttonStyle}
+          onPress={this.chat}
         />
 
       </SafeAreaView>

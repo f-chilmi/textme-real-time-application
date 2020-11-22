@@ -31,6 +31,7 @@ export default class ChatRoom extends Component {
           <Input 
             containerStyle={style.containerStyle}
             inputStyle={style.inputChat}
+            inputContainerStyle={{height: '100%'}}
           />
           <Iconic name='camera-alt' size={28} style={style.iconRight} />
           {/* <Icon name="camera" type="FontAwesome" style={style.iconRight} /> */}
@@ -64,6 +65,7 @@ const style = StyleSheet.create({
     borderColor: '#d3d3d3',
     borderWidth: 1,
     padding: 0,
+    // justifyContent: 'center',
   },
   iconLeft: {
     marginRight: 8

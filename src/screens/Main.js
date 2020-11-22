@@ -15,20 +15,28 @@ import ChatRoom from './ChatRoom';
 import Register from './Register';
 import Verification from './Verification';
 import Setting from './Setting';
+import ProfileUser from './ProfileUser';
+
+// const WelcomeStack = () => {
+//   return(
+//     <Stack.Navigator>
+//       <Stack.Screen 
+//         options={{headerShown: false}}
+//         name="Register"
+//         component={Register}
+//       />
+//       <Stack.Screen 
+//         options={{headerShown: false}}
+//         name="Verification"
+//         component={Verification}
+//       />
+//     </Stack.Navigator>
+//   )
+// }
 
 const MainStack = () => {
   return(
     <Stack.Navigator>
-      <Stack.Screen 
-        options={{headerShown: false}}
-        name="Chat"
-        component={Chat}
-      />
-      <Stack.Screen 
-        options={{headerShown: false}}
-        name="ChatRoom"
-        component={ChatRoom}
-      />
       <Stack.Screen 
         options={{headerShown: false}}
         name="Register"
@@ -38,6 +46,16 @@ const MainStack = () => {
         options={{headerShown: false}}
         name="Verification"
         component={Verification}
+      />
+      <Stack.Screen 
+        options={{headerShown: false}}
+        name="Chat"
+        component={Chat}
+      />
+      <Stack.Screen 
+        options={{headerShown: false}}
+        name="ChatRoom"
+        component={ChatRoom}
       />
     </Stack.Navigator>
   )
@@ -51,6 +69,11 @@ const SettingStack = () => {
         name="Setting"
         component={Setting}
       />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="ProfileUser"
+        component={ProfileUser}
+      />
     </Stack.Navigator>
   )
 }
@@ -61,14 +84,14 @@ export default class Main extends Component {
       <NavigationContainer>
         <BottomTabs.Navigator
           tabBarOptions={{
-            activeTintColor: 'tomato',
+            activeTintColor: '#1e90ff',
             inactiveTintColor: 'gray',
           }}
         >
           <BottomTabs.Screen
             options={{
               tabBarIcon: ({size, color, focused}) => (
-                <Iconic name="chat-bubble-outline" size={26} color="grey"/>
+                <Iconic name="chat-bubble-outline" color={color} size={size} color="grey"/>
               ),
             }}
             name="Chat"
@@ -77,7 +100,7 @@ export default class Main extends Component {
           <BottomTabs.Screen
             options={{
               tabBarIcon: ({size, color, focused}) => (
-                <Iconic name="settings" size={26} color="grey"/>
+                <Iconic name="settings" color={color} size={size} color="grey"/>
               ),
             }}
             name="Setting"
