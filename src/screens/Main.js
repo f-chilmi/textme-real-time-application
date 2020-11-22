@@ -16,6 +16,7 @@ import Register from './Register';
 import Verification from './Verification';
 import Setting from './Setting';
 import ProfileUser from './ProfileUser';
+import ContactInfo from './ContactInfo';
 
 // const WelcomeStack = () => {
 //   return(
@@ -56,6 +57,11 @@ const MainStack = () => {
         options={{headerShown: false}}
         name="ChatRoom"
         component={ChatRoom}
+      />
+      <Stack.Screen 
+        options={{headerShown: false}}
+        name="ContactInfo"
+        component={ContactInfo}
       />
     </Stack.Navigator>
   )

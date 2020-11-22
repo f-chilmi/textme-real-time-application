@@ -122,6 +122,7 @@ export default Setting;
 const style = StyleSheet.create({
   parent: {
     flex: 1,
+    marginTop: 25,
     // padding: '3%',
     // backgroundColor: 'white',
   },

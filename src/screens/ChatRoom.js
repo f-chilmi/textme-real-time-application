@@ -8,6 +8,9 @@ export default class ChatRoom extends Component {
   register = () => {
     this.props.navigation.navigate('Register')
   }
+  contactInfo = () => {
+    this.props.navigation.navigate('ContactInfo')
+  }
   render() {
     return (
       <View style={style.parent}>
@@ -15,7 +18,7 @@ export default class ChatRoom extends Component {
           placement="left"
           backgroundColor="#f5f5f5"
           leftComponent={
-            <Iconic onPress={this.register} name='chevron-left' type='FontAwesome' color='#1e90ff' size={28} />
+            <Iconic name='chevron-left' type='FontAwesome' color='#1e90ff' size={28} />
           }
           centerComponent={{ text: 'Sender', style: { color: 'black' }, }}
           rightComponent={{ icon: 'call', color: '#1e90ff' }}
