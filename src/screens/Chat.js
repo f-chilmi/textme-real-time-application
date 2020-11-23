@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -7,29 +7,52 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import moment from 'moment'
 import {Icon, Thumbnail} from 'native-base';
 import {SearchBar} from 'react-native-elements';
+import chatAction from '../redux/actions/chat';
 
 const Chat = ({navigation}) => {
+  const dispatch = useDispatch();
   const [search, setSearch] = React.useState('');
+  const chat = useSelector((state) => state.chat);
+  const auth = useSelector((state) => state.auth);
+  useEffect(() => {
+    dispatch(chatAction.getChat(auth.token))
+  }, [dispatch]);
+
+  const chatList = chat.data.chat
+  const date = moment(chat.data.createdAt).format('DD/MM/YY')
+  const today = moment(new Date()).format('DD/MM/YY')
+  const hour = moment(chat.data.createdAt).format('hh:mm')
+
+  const chatRoom = (id_sender, id_receiver) => {
+    navigation.navigate('chatRoom', {id_sender, id_receiver});
+  };
+
   const renderItem = ({item}) => (
-    <TouchableOpacity style={style.rowChat} onPress={()=>navigation.navigate('ChatRoom')}>
+    <TouchableOpacity style={style.rowChat} onPress={()=>chatRoom(item.id_sender, item.id_receiver)} key={item.id.toString().concat(item.message)}>
       <View style={style.thumbnailWrap}>
         <Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />
       </View>
       <View style={style.centerTextContent}>
         <Text style={style.sender}>Nama pengirim</Text>
-        <Text style={style.content}>
-          Isi chat sangat panjang Isi chat sangat panjang Isi chat sangat
-          panjang Isi chat{' '}
+        <Text style={style.content}> 
+          {item.message.length > 80
+            ? item.message.slice(0, 81).concat('...')
+            : item.message} 
         </Text>
       </View>
       <View>
-        <Text style={style.content}>28/10/20</Text>
+        {today===date ? (
+          <Text style={style.content}> {hour}</Text>
+        ):(
+        <Text style={style.content}>{date}</Text>
+        )}
       </View>
     </TouchableOpacity>
   );
-
   return (
     <View style={style.parent}>
       <View style={style.rowDir}>
@@ -73,7 +96,7 @@ const Chat = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <FlatList
-          data={Array(30)}
+          data={chatList}
           renderItem={renderItem}
           keyExtractor={(item) => item}
           // numColumns={2}
