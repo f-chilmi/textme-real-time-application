@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, SafeAreaView} from 'react-native';
 import {Thumbnail} from 'native-base'
 import {Header, Input} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons';
@@ -29,7 +29,7 @@ export default class ProfileUser extends Component {
   };
   render() {
     return (
-      <View style={style.parent}>
+      <KeyboardAvoidingView style={style.parent}>
         <Header 
           placement='center'
           backgroundColor='transparent'
@@ -48,13 +48,19 @@ export default class ProfileUser extends Component {
             </View>
           </View>
           <View style={style.inputWrapper}> 
-            <Input 
+            {/* <Input 
               inputContainerStyle={{height: '100%'}}
               containerStyle={style.containerStyle}
               inputStyle={style.inputStyle0}
               value={this.state.nama}
               editable
               onChange={(text)=>this.setState({nama: text})}
+            /> */}
+            <TextInput
+              value={this.state.nama}
+              style={style.containerStyle}
+              onChange={(text)=>this.setState({nama: text})}
+              // onSubmitEditing={}
             />
           </View>
         </View>
@@ -63,14 +69,7 @@ export default class ProfileUser extends Component {
           <Text style={style.greyText}>NOMOR TELEPON</Text>
         </View>
         <View style={style.inputNumberWrapper}>
-          <Input 
-              inputContainerStyle={{height: '100%'}}
-              containerStyle={style.containerStyle1}
-              inputStyle={style.inputStyle0}
-              value={this.state.phone}
-              editable
-              onChange={(text)=>this.setState({phone: text})}
-            />
+          <Text style={style.inputStyle0}>{this.state.phone}</Text>
         </View>
 
         <View style={style.textWrapper}>
@@ -83,7 +82,7 @@ export default class ProfileUser extends Component {
 
 
 
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -117,7 +116,8 @@ const style = StyleSheet.create({
     fontSize: 12
   },
   textRight: {
-    paddingHorizontal: 20,
+    paddingLeft: 20,
+    paddingRight: 50,
     paddingTop: '3%',
   },
   greyText: {
@@ -126,23 +126,26 @@ const style = StyleSheet.create({
   },
   containerStyle: {
     // backgroundColor: 'yellow',
-    // padding: 2,
+    padding: '3%',
     // height: 30,
-    borderBottomWidth: 1,
-    borderColor: 'grey',
+    borderBottomWidth: 0.5,
+    borderColor: '#dcdcdc',
+    fontSize: 12,
   },
   inputStyle0: {
     fontSize: 12,
   },
   inputWrapper: {
-    height: 15,
+    height: 40,
     // backgroundColor: 'yellow',
-    borderTopWidth: 1,
-    borderColor: 'grey',
+    borderTopWidth: 0.5,
+    borderColor: '#dcdcdc',
   },
   inputNumberWrapper: {
     height: 40,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    padding: '3%',
   },
   containerStyle1: {
     // backgroundColor: 'tomato',

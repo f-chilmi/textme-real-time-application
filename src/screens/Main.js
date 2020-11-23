@@ -3,7 +3,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {connect} from 'react-redux';
-import {Icon} from 'native-base';
 import Iconic from 'react-native-vector-icons/MaterialIcons';
 
 const Stack = createStackNavigator();
@@ -18,24 +17,7 @@ import Setting from './Setting';
 import ProfileUser from './ProfileUser';
 import ContactInfo from './ContactInfo';
 
-// const WelcomeStack = () => {
-//   return(
-//     <Stack.Navigator>
-//       <Stack.Screen 
-//         options={{headerShown: false}}
-//         name="Register"
-//         component={Register}
-//       />
-//       <Stack.Screen 
-//         options={{headerShown: false}}
-//         name="Verification"
-//         component={Verification}
-//       />
-//     </Stack.Navigator>
-//   )
-// }
-
-const MainStack = () => {
+const WelcomeStack = () => {
   return(
     <Stack.Navigator>
       <Stack.Screen 
@@ -48,6 +30,13 @@ const MainStack = () => {
         name="Verification"
         component={Verification}
       />
+    </Stack.Navigator>
+  )
+}
+
+const MainStack = () => {
+  return(
+    <Stack.Navigator>
       <Stack.Screen 
         options={{headerShown: false}}
         name="Chat"
@@ -84,36 +73,57 @@ const SettingStack = () => {
   )
 }
 
-export default class Main extends Component {
+class Main extends Component {
+  state = {
+    isLogin: true
+  }
   render() {
+    console.log(this.props)
     return (
       <NavigationContainer>
-        <BottomTabs.Navigator
-          tabBarOptions={{
-            activeTintColor: '#1e90ff',
-            inactiveTintColor: 'gray',
-          }}
-        >
-          <BottomTabs.Screen
-            options={{
-              tabBarIcon: ({size, color, focused}) => (
-                <Iconic name="chat-bubble-outline" color={color} size={size} color="grey"/>
-              ),
+        {this.props.auth.isLogin ? (
+          <BottomTabs.Navigator
+            tabBarOptions={{
+              activeTintColor: '#1e90ff',
+              inactiveTintColor: 'gray',
             }}
-            name="Chat"
-            component={MainStack}
-          />
-          <BottomTabs.Screen
-            options={{
-              tabBarIcon: ({size, color, focused}) => (
-                <Iconic name="settings" color={color} size={size} color="grey"/>
-              ),
-            }}
-            name="Setting"
-            component={SettingStack}
-          />
-        </BottomTabs.Navigator>
+          >
+            <BottomTabs.Screen
+              options={{
+                tabBarIcon: ({size, color, focused}) => (
+                  <Iconic name="chat-bubble-outline" color={color} size={size} color="grey"/>
+                ),
+              }}
+              name="Chat"
+              component={MainStack}
+            />
+            <BottomTabs.Screen
+              options={{
+                tabBarIcon: ({size, color, focused}) => (
+                  <Iconic name="settings" color={color} size={size} color="grey"/>
+                ),
+              }}
+              name="Setting"
+              component={SettingStack}
+            />
+          </BottomTabs.Navigator>
+        ) : (
+          <Stack.Navigator>
+            <Stack.Screen 
+              options={{headerShown: false}}
+              name="Welcome"
+              component={WelcomeStack}
+            />
+          </Stack.Navigator>
+        )}
+        
       </NavigationContainer>
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps)(Main);

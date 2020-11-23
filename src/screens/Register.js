@@ -2,13 +2,22 @@ import React, { Component } from 'react'
 import {View, StyleSheet, Text, TouchableOpacity, SafeAreaView} from 'react-native'
 import {Header, Input, Button} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons';
+import auth from '../redux/actions/auth';
+import {connect} from 'react-redux';
 
-export default class Register extends Component {
+class Register extends Component {
+  state = {
+    phone: ''
+  }
   verification = () => {
-    this.props.navigation.navigate('Verification')
+    const data = {phone: this.state.phone};
+    this.props.setPhone(data);
+    this.props.navigation.navigate('Verification');
   }
 
   render() {
+    // console.log(this.state)
+    // console.log(this.props)
     return (
       <SafeAreaView style={style.parent}>
         <Header
@@ -25,15 +34,18 @@ export default class Register extends Component {
             <Input 
               containerStyle={style.containerStyle}
               inputStyle={style.inputStyle0}
+              value="Indonesia"
             />
             <View style={style.inputDir}>
               <Input 
                 containerStyle={style.containerStyleLeft}
                 inputStyle={style.inputStyle}
+                value="+62"
               />
               <Input 
                 containerStyle={style.containerStyleRight}
                 inputStyle={style.inputStyle}
+                onChangeText={(text)=>this.setState({phone: text})}
               />
             </View>
             <Text style={style.smallText}>Biaya SMS operator telepon mungkin berlaku</Text>
@@ -54,6 +66,17 @@ export default class Register extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+const mapDispatchToProps = {
+  setPhone: auth.setPhone,
+  login: auth.auth,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register)
 
 const style = StyleSheet.create({
   parent: {

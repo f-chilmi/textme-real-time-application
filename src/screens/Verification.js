@@ -1,19 +1,24 @@
 import React, { Component } from 'react'
 import {View, StyleSheet, Text, TouchableOpacity, SafeAreaView} from 'react-native'
 import {Header, Input, Button} from 'react-native-elements'
-import Iconic from 'react-native-vector-icons/MaterialIcons';4
+import Iconic from 'react-native-vector-icons/MaterialIcons';
+import auth from '../redux/actions/auth';
+import {connect} from 'react-redux';
 
-export default class Verification extends Component {
+class Verification extends Component {
   chat = () => {
+    const data = {phone: this.props.auth.phone}
+    this.props.login(data)
     this.props.navigation.navigate('Chat')
   }
   
   render() {
+    console.log(this.props)
     return (
       <SafeAreaView style={style.parent}>
         <Header
           backgroundColor="transparent"
-          centerComponent={{ text: 'Verifikasi +62 813 2868 6883', style: { color: 'black', fontSize: 13 }, }}
+          centerComponent={<Text style={style.textHeader}>Verifikasi +62{this.props.auth.phone}</Text>}
           rightComponent={<Iconic onPress={this.register} name='more-vert' color='grey' size={28} />}
           centerContainerStyle={{flex: 5}}
         />
@@ -21,7 +26,7 @@ export default class Verification extends Component {
         <View style={style.rowDir}>
           <Text style={style.smallText}>
             Menunggu pendeteksian SMS secara otomatis yang telah dikirim ke 
-            <Text style={style.textBlack}> +62 813 2868 6883 </Text>
+            <Text style={style.textBlack}> +62 {this.props.auth.phone}. </Text>
             <Text style={style.linkedText}> Nomor salah?</Text>
           </Text>
 
@@ -59,10 +64,23 @@ export default class Verification extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+const mapDispatchToProps = {
+  login: auth.auth,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Verification)
+
 const style = StyleSheet.create({
   parent: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  textHeader: {
+    fontSize: 13,
   },
   rowDir: {
     paddingTop: 10,
