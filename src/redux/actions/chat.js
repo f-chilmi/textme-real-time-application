@@ -9,5 +9,9 @@ export default {
   getChat: (token) => ({
     type: 'CHAT_LIST',
     payload: http(token).get('/message')
+  }),
+  privateChat: (token, id_sender, id_receiver) => ({
+    type: 'DETAIL_CHAT',
+    payload: http(token).get(`/message/${id_sender}/${id_receiver}`)
   })
 }

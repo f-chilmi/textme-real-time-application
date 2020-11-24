@@ -4,14 +4,14 @@ import Iconic from 'react-native-vector-icons/MaterialIcons';
 import {Thumbnail} from 'native-base';
 import {Header, Input} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
+import {connect} from 'react-redux';
+import auth from '../redux/actions/auth';
+import chat from '../redux/actions/chat';
 
-export default class ChatRoom extends Component {
+class ChatRoom extends Component {
   state = {
     picture: '',
     chat: '',
-  }
-  register = () => {
-    this.props.navigation.navigate('Register')
   }
   contactInfo = () => {
     this.props.navigation.navigate('ContactInfo')
@@ -33,6 +33,7 @@ export default class ChatRoom extends Component {
     });
   };
   render() {
+    console.log(this.props)
     return (
       <View style={style.parent}>
         <Header 
@@ -97,6 +98,17 @@ export default class ChatRoom extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  chat: state.chat,
+});
+
+const mapDispatchToProps = {
+  login: auth.auth,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom)
 
 const style = StyleSheet.create({
   parent: {

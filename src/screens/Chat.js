@@ -23,12 +23,12 @@ const Chat = ({navigation}) => {
   }, [dispatch]);
 
   const chatList = chat.data.chat
-  const date = moment(chat.data.createdAt).format('DD/MM/YY')
   const today = moment(new Date()).format('DD/MM/YY')
   const hour = moment(chat.data.createdAt).format('hh:mm')
 
   const chatRoom = (id_sender, id_receiver) => {
-    navigation.navigate('chatRoom', {id_sender, id_receiver});
+    dispatch(chatAction.privateChat(auth.token, id_sender, id_receiver))
+    navigation.navigate('ChatRoom')
   };
 
   const renderItem = ({item}) => (
@@ -45,10 +45,10 @@ const Chat = ({navigation}) => {
         </Text>
       </View>
       <View>
-        {today===date ? (
+        {today===moment(item.createdAt).format('DD/MM/YY') ? (
           <Text style={style.content}> {hour}</Text>
         ):(
-        <Text style={style.content}>{date}</Text>
+        <Text style={style.content}>{moment(item.createdAt).format('DD/MM/YY')}</Text>
         )}
       </View>
     </TouchableOpacity>

@@ -3,6 +3,7 @@ const initialState = {
   isError: false,
   alertMsg: '',
   data: {},
+  detail: {},
 }
 
 export default (state = initialState, action) => {
@@ -26,6 +27,27 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         data: action.payload.data
+      }
+    }
+    case 'DETAIL_CHAT_PENDING': {
+      return {
+        ...state,
+        isLoading: true
+      }
+    }
+    case 'DETAIL_CHAT_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Failed get data'
+      }
+    }
+    case 'DETAIL_CHAT_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        detail: action.payload.data
       }
     }
     default: {
