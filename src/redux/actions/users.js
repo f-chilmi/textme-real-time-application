@@ -13,5 +13,9 @@ export default {
   editUser: (token, data) => ({
     type: 'EDIT',
     payload: http(token).patch('/users', qs.stringify(data))
+  }),
+  editPicture: (token, data) => ({
+    type: 'EDIT',
+    payload: http(token).patch('/users', data)
   })
 }
