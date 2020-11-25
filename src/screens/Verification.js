@@ -9,7 +9,7 @@ class Verification extends Component {
   chat = () => {
     const data = {phone: this.props.auth.phone}
     this.props.login(data)
-    this.props.navigation.navigate('Chat')
+    // this.props.navigation.navigate('Chat')
   }
   
   render() {

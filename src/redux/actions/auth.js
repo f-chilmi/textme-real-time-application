@@ -9,5 +9,8 @@ export default {
   setPhone: (data) => ({
     type: 'SET_PHONE',
     payload: data
-  })
+  }),
+  logout: () => ({
+    type: 'LOGOUT',
+  }),
 }

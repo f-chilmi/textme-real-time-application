@@ -7,14 +7,21 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import {Icon, Thumbnail} from 'native-base';
-import {SearchBar} from 'react-native-elements';
+import {Thumbnail} from 'native-base';
+import {useSelector, useDispatch} from 'react-redux';
 import Iconic from 'react-native-vector-icons/MaterialIcons';
+import users from '../redux/actions/users';
 
 const Setting = ({navigation}) => {
-  const [search, setSearch] = React.useState('');
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const users = useSelector((state) => state.users);
+  useEffect(() => {
+    dispatch(users.getUser(auth.token))
+  }, [dispatch]);
   
-
+  console.log(auth)
+  console.log(users)
   return (
     <View style={style.parent}>
       <View style={style.header}>

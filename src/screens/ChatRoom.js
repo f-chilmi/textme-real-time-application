@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, TouchableOpacity, ScrollView, Text, ImageBackground, TextInput} from 'react-native';
 import Iconic from 'react-native-vector-icons/MaterialIcons';
+import jwt_decode from "jwt-decode"
+import moment from 'moment'
 import {Thumbnail} from 'native-base';
 import {Header, Input} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
@@ -34,6 +36,11 @@ class ChatRoom extends Component {
   };
   render() {
     console.log(this.props)
+    const idToken = jwt_decode(this.props.auth.token)
+    const { chat } = this.props.chat.detail
+    const today = moment(new Date()).format('DD/MM/YY')
+    console.log(chat)
+    console.log(idToken.detailUser.id)
     return (
       <View style={style.parent}>
         <Header 
@@ -59,14 +66,35 @@ class ChatRoom extends Component {
 
         <ImageBackground style={style.imageBackground} source={require('../assets/5fa3e598894a4.jpg')} >
           <ScrollView style={{padding: '3%'}}>
-            <View style={style.chatReceive}>
+            {chat.map(item=>(
+              item.id_sender===idToken.detailUser.id ? (
+                <View style={style.chatReceive}>
+                  <Text style={style.textChat}> {item.message} </Text>
+                  {today===moment(item.createdAt).format('DD/MM/YY') ? (
+                    <Text style={style.time}> {moment(item.createdAt).format('HH:mm')} </Text>
+                  ):(
+                  <Text style={style.time}>{moment(item.createdAt).format('DD/MM/YY HH:mm')}</Text>
+                  )}
+                </View>
+              ) : (
+                <View style={style.chatSend}>
+                  <Text style={style.textChat}> {item.message} </Text>
+                  {today===moment(item.createdAt).format('DD/MM/YY') ? (
+                    <Text style={style.time}> {moment(item.createdAt).format('HH:mm')} </Text>
+                  ):(
+                  <Text style={style.time}>{moment(item.createdAt).format('DD/MM/YY HH:mm')}</Text>
+                  )}
+                </View>
+              )
+            ))}
+            {/* <View style={style.chatReceive}>
               <Text style={style.textChat}>text yang sangat panjang </Text>
               <Text style={style.time}>18.00</Text>
             </View>
             <View style={style.chatSend}>
               <Text style={style.textChat}>text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang </Text>
               <Text style={style.time}>18.01</Text>
-            </View>
+            </View> */}
           </ScrollView>
         </ImageBackground>
 

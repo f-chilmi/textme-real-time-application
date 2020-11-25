@@ -9,17 +9,22 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import moment from 'moment'
+import jwt_decode from "jwt-decode"
 import {Icon, Thumbnail} from 'native-base';
 import {SearchBar} from 'react-native-elements';
 import chatAction from '../redux/actions/chat';
+import authAction from '../redux/actions/auth';
+import usersAction from '../redux/actions/users';
 
 const Chat = ({navigation}) => {
   const dispatch = useDispatch();
   const [search, setSearch] = React.useState('');
   const chat = useSelector((state) => state.chat);
   const auth = useSelector((state) => state.auth);
+  const users = useSelector((state) => state.users);
   useEffect(() => {
     dispatch(chatAction.getChat(auth.token))
+    dispatch(usersAction.getAllUser(auth.token))
   }, [dispatch]);
 
   const chatList = chat.data.chat
@@ -28,9 +33,15 @@ const Chat = ({navigation}) => {
 
   const chatRoom = (id_sender, id_receiver) => {
     dispatch(chatAction.privateChat(auth.token, id_sender, id_receiver))
-    navigation.navigate('ChatRoom')
+    navigation.navigate('ChatRoom', {id_sender, id_receiver})
   };
-
+  const logout = () => {
+    dispatch(authAction.logout())
+  }
+  const idToken = jwt_decode(auth.token)
+  console.log(idToken.detailUser.id)
+  console.log(auth)
+  console.log(users)
   const renderItem = ({item}) => (
     <TouchableOpacity style={style.rowChat} onPress={()=>chatRoom(item.id_sender, item.id_receiver)} key={item.id.toString().concat(item.message)}>
       <View style={style.thumbnailWrap}>
@@ -56,7 +67,7 @@ const Chat = ({navigation}) => {
   return (
     <View style={style.parent}>
       <View style={style.rowDir}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={logout}>
           <Text style={style.linked}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity style={style.iconRight}>

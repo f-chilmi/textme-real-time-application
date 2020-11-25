@@ -4,12 +4,18 @@ import {Thumbnail} from 'native-base'
 import {Header, Input} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-picker';
+import auth from '../redux/actions/auth';
+import users from '../redux/actions/users';
+import {connect} from 'react-redux';
 
-export default class ProfileUser extends Component {
+class ProfileUser extends Component {
   state={
     nama: 'Furoidah Chilmi',
     phone: '+62 813 2868 6883',
     picture: '',
+  }
+  componentDidMount(){
+    this.props.getUser(this.props.auth.token)
   }
   handleChoosePhoto = () => {
     const options = {};
@@ -28,6 +34,7 @@ export default class ProfileUser extends Component {
     });
   };
   render() {
+    console.log(this.props)
     return (
       <KeyboardAvoidingView style={style.parent}>
         <Header 
@@ -86,6 +93,18 @@ export default class ProfileUser extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  users: state.users,
+});
+
+const mapDispatchToProps = {
+  login: auth.auth,
+  getUser: users.getUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileUser)
 
 const style = StyleSheet.create({
   parent: {

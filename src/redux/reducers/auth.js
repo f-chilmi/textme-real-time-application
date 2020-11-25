@@ -41,7 +41,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLogin: false,
-        token: ' ',
+        token: '',
         alertMsg: 'Logout successfully'
       }
     }

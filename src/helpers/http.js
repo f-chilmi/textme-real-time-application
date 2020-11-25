@@ -1,7 +1,7 @@
 import {default as axios} from 'axios';
-// import {API_URL} from '@env';
+import {API_URL} from '@env';
 
-const API_URL = 'http://127.0.0.1:8080'
+// const API_URL = 'http://127.0.0.1:8080'
 
 const http = (token = null) => {
   return axios.create({
