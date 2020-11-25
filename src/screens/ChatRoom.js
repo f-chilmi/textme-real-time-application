@@ -25,11 +25,9 @@ const ChatRoom = ({navigation, route}) => {
   // }, [dispatch]);
 
   const idToken = jwt_decode(auth.token)
-  let chatList = chat.detail.chat
-  const { user1, user2 } = chat.detail
+  let chatList = chat.detail
+  const { user1, user2 } = chat
   const today = moment(new Date()).format('DD/MM/YY')
-
-  // console.log(user1, user2)
 
   const contactInfo = () => {
     navigation.navigate('ContactInfo')
@@ -54,8 +52,7 @@ const ChatRoom = ({navigation, route}) => {
   const sendChat = () => {
     setContent('')
     chatList = [...chatList, dataSend]
-    // dispatch(chatAction.sendChat(auth.token, dataSend))
-    // dispatch(chatAction.privateChat(auth.token, idToken.detailUser.id, id_receiver))
+    dispatch(chatAction.sendChat(auth.token, dataSend))
   }
 
   const renderItem = ({item}) => (
@@ -91,14 +88,18 @@ const ChatRoom = ({navigation, route}) => {
         }
         centerComponent={
           <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={contactInfo}>
-            {user1.id===idToken.detailUser.id && user2.picture===null ?  
-              (<Thumbnail small source={require('../assets/5fa3e598894a4.jpg')} />) : 
-              (<Thumbnail small source={{uri: `${API_URL}/${user2.picture}`}} />)}
-            {user2.id===idToken.detailUser.id && user1.picture===null ?  
-              (<Thumbnail small source={require('../assets/5fa3e598894a4.jpg')} />) : 
-              (<Thumbnail small source={{uri: `${API_URL}/${user1.picture}`}} />)}
-            {user1.id===idToken.detailUser.id && <Text >{user2.username}</Text>}
-            {user2.id===idToken.detailUser.id && <Text >{user1.username}</Text>}
+            {user1.id===idToken.detailUser.id ? (
+              user2.picture===null ? 
+                (<Thumbnail small source={require('../assets/5fa3e598894a4.jpg')} />) : 
+                (<Thumbnail small source={{uri: `${API_URL}/${user2.picture}`}} />)
+            ) : (
+              user1.picture===null ? 
+                (<Thumbnail small source={require('../assets/5fa3e598894a4.jpg')} />) : 
+                (<Thumbnail small source={{uri: `${API_URL}/${user1.picture}`}} />)
+            )}
+
+            {user1.id===idToken.detailUser.id && <Text style={{marginLeft: 10}}>{user2.username}</Text>}
+            {user2.id===idToken.detailUser.id && <Text style={{marginLeft: 10}} >{user1.username}</Text>}
           </TouchableOpacity>
         }
         rightComponent={

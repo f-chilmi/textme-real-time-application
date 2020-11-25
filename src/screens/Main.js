@@ -9,104 +9,44 @@ const Stack = createStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 // import screen
-import Chat from './Chat';
 import ChatRoom from './ChatRoom';
-import Register from './Register';
-import Verification from './Verification';
-import Setting from './Setting';
-import ProfileUser from './ProfileUser';
 import ContactInfo from './ContactInfo';
+import ProfileUser from './ProfileUser';
 
-const WelcomeStack = () => {
-  return(
-    <Stack.Navigator>
-      <Stack.Screen 
-        options={{headerShown: false}}
-        name="Register"
-        component={Register}
-      />
-      <Stack.Screen 
-        options={{headerShown: false}}
-        name="Verification"
-        component={Verification}
-      />
-    </Stack.Navigator>
-  )
-}
+// import Bottom Tab Navigator
+import TabNavigator from './TabNavigator'
 
-const MainStack = () => {
-  return(
-    <Stack.Navigator>
-      <Stack.Screen 
-        options={{headerShown: false}}
-        name="Chat"
-        component={Chat}
-      />
-      <Stack.Screen 
-        options={{headerShown: false}}
-        name="ChatRoom"
-        component={ChatRoom}
-      />
-      <Stack.Screen 
-        options={{headerShown: false}}
-        name="ContactInfo"
-        component={ContactInfo}
-      />
-    </Stack.Navigator>
-  )
-}
-
-const SettingStack = () => {
-  return(
-    <Stack.Navigator>
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="Setting"
-        component={Setting}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="ProfileUser"
-        component={ProfileUser}
-      />
-    </Stack.Navigator>
-  )
-}
+// import Stack
+import WelcomeStack from './WelcomeStack'
 
 class Main extends Component {
-  state = {
-    isLogin: true
-  }
   render() {
     console.log(this.props)
     return (
       <NavigationContainer>
         {this.props.auth.isLogin ? (
-          <BottomTabs.Navigator
-            tabBarOptions={{
-              activeTintColor: '#1e90ff',
-              inactiveTintColor: 'gray',
-            }}
-          >
-            <BottomTabs.Screen
-              options={{
-                tabBarIcon: ({size, color, focused}) => (
-                  <Iconic name="chat-bubble-outline" color={color} size={size} color="grey"/>
-                ),
-              }}
-              name="Chat"
-              component={MainStack}
+          <Stack.Navigator>
+            <Stack.Screen 
+              options={{headerShown: false}}
+              name="Tab"
+              component={TabNavigator}
             />
-            <BottomTabs.Screen
-              options={{
-                tabBarIcon: ({size, color, focused}) => (
-                  <Iconic name="settings" color={color} size={size} color="grey"/>
-                ),
-              }}
-              name="Setting"
-              component={SettingStack}
+            <Stack.Screen 
+              options={{headerShown: false}}
+              name="ChatRoom"
+              component={ChatRoom}
             />
-          </BottomTabs.Navigator>
+            <Stack.Screen 
+              options={{headerShown: false}}
+              name="ContactInfo"
+              component={ContactInfo}
+            />
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="ProfileUser"
+              component={ProfileUser}
+            />
+          </Stack.Navigator>
         ) : (
           <Stack.Navigator>
             <Stack.Screen 

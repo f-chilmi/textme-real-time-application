@@ -17,12 +17,12 @@ const Setting = ({navigation}) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const users = useSelector((state) => state.users);
-  const {result} = users.data
+  const result = users.data
   useEffect(() => {
     dispatch(usersAction.getUser(auth.token))
   }, [dispatch]);
   
-  // console.log(result)
+  console.log(result)
   // console.log(users)
   return (
     <View style={style.parent}>

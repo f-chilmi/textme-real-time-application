@@ -40,13 +40,15 @@ const Chat = ({navigation}) => {
   const renderItem = ({item}) => (
     <TouchableOpacity style={style.rowChat} onPress={()=>chatRoom(item.id_sender, item.id_receiver)} key={item.id.toString().concat(item.message)}>
       <View style={style.thumbnailWrap}>
-        {item.id_sender===idToken.detailUser.id && item.receiver.picture===null ?  
-          (<Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />) : 
-          (<Thumbnail source={{uri: `${API_URL}/${item.receiver.picture}`}} />)}
-        {item.id_receiver===idToken.detailUser.id && item.sender.picture===null ?  
-          (<Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />) : 
-          (<Thumbnail source={{uri: `${API_URL}/${item.sender.picture}`}} />)}
-        {/* <Thumbnail source={require('../assets/5fa3e598894a4.jpg')} /> */}
+        {item.id_sender===idToken.detailUser.id ? (
+          item.receiver.picture===null ? 
+            (<Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />) : 
+            (<Thumbnail source={{uri: `${API_URL}/${item.receiver.picture}`}} />)
+        ) : (
+          item.id_sender.picture===null ? 
+            (<Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />) : 
+            (<Thumbnail source={{uri: `${API_URL}/${item.id_sender.picture}`}} />)
+        )}
       </View>
       <View style={style.centerTextContent}>
         {item.id_sender===idToken.detailUser.id && <Text style={style.sender}>{item.receiver.username}</Text>}

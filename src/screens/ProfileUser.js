@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import {View, StyleSheet, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, SafeAreaView} from 'react-native';
 import {Thumbnail} from 'native-base'
-import {Header, Input} from 'react-native-elements'
+import {Header} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-picker';
 import auth from '../redux/actions/auth';
 import users from '../redux/actions/users';
 import {connect} from 'react-redux';
+import {API_URL} from '@env';
 
 class ProfileUser extends Component {
   state={
@@ -16,10 +17,10 @@ class ProfileUser extends Component {
   }
   componentDidMount(){
     this.props.getUser(this.props.auth.token)
-    const {result} = this.props.users.data
+    const {data} = this.props.users
     this.setState({
-      nama: result.username,
-      picture: result.picture
+      nama: data.username,
+      picture: data.picture
     })
   }
   handleChoosePhoto = () => {
@@ -34,7 +35,7 @@ class ProfileUser extends Component {
           type: response.type,
           name: response.fileName,
         });
-        // this.props.updateImage(this.props.auth.token, form);
+        this.props.editPicture(this.props.auth.token, form);
       }
     });
   };
@@ -45,7 +46,8 @@ class ProfileUser extends Component {
   }
   render() {
     console.log(this.state)
-    const {result} = this.props.users.data
+    console.log(this.props)
+    const result = this.props.users.data
     // console.log(result)
     return (
       <KeyboardAvoidingView style={style.parent}>
@@ -59,7 +61,11 @@ class ProfileUser extends Component {
         <View style={style.viewTopWrapper}>
           <View style={style.viewTop}>
             <TouchableOpacity style={style.thumbWrapper} onPress={this.handleChoosePhoto}>
-              <Thumbnail style={style.thum} source={require('../assets/5fa3e598894a4.jpg')} />
+              {result.picture===null?(
+                <Thumbnail style={style.thum} source={require('../assets/5fa3e598894a4.jpg')} />
+              ) : (
+                <Thumbnail source={{uri: `${API_URL}/${result.picture}`}} />
+              )}
               <Text style={style.linked}>Edit</Text>
             </TouchableOpacity>
             <View style={style.textRight}>
@@ -67,14 +73,6 @@ class ProfileUser extends Component {
             </View>
           </View>
           <View style={style.inputWrapper}> 
-            {/* <Input 
-              inputContainerStyle={{height: '100%'}}
-              containerStyle={style.containerStyle}
-              inputStyle={style.inputStyle0}
-              value={this.state.nama}
-              editable
-              onChange={(text)=>this.setState({nama: text})}
-            /> */}
             <TextInput
               value={this.state.nama===null?'New user':this.state.nama}
               style={style.containerStyle}
@@ -115,6 +113,7 @@ const mapDispatchToProps = {
   login: auth.auth,
   getUser: users.getUser,
   editUser: users.editUser,
+  editPicture: users.editPicture,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileUser)

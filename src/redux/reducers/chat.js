@@ -5,6 +5,8 @@ const initialState = {
   data: {},
   detail: {},
   chatSent: {},
+  user1: {},
+  user2: {},
 }
 
 export default (state = initialState, action) => {
@@ -48,7 +50,9 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        detail: action.payload.data
+        detail: action.payload.data.chat,
+        user1: action.payload.data.user1,
+        user2: action.payload.data.user2,
       }
     }
     case 'SEND_CHAT_PENDING': {
@@ -69,7 +73,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        chatSent: action.payload.data
+        detail: action.payload.data.private
       }
     }
     default: {
