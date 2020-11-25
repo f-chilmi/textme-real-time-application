@@ -10,7 +10,6 @@ import {
 import {Thumbnail, Icon} from 'native-base';
 import {Header, SearchBar} from 'react-native-elements'
 import {useSelector, useDispatch} from 'react-redux';
-import Iconic from 'react-native-vector-icons/MaterialIcons';
 import usersAction from '../redux/actions/users';
 import {API_URL} from '@env';
 
@@ -26,16 +25,21 @@ const Contact = ({navigation}) => {
   const {result} = users.allUser
   console.log(result)
 
-  const renderItem = ({item}) => {
-    <View style={style.wrapper}>
+  const renderItem = ({item}) => (
+    <TouchableOpacity style={style.wrapper}>
       {console.log(item)}
-      <Thumbnail style={style.photo} source={require('../assets/5fa3e598894a4.jpg')} />
+      {item.picture===null?(
+        <Thumbnail style={style.photo} source={require('../assets/5fa3e598894a4.jpg')} />
+      ) : (
+        <Thumbnail style={style.photo} source={{uri: `${API_URL}/${item.picture}`}} />
+      )}
+      {/* <Thumbnail style={style.photo} source={require('../assets/5fa3e598894a4.jpg')} /> */}
       <View style={style.nameWrapper}>
-        {/* <Text style={style.textName}>{item.username}</Text> */}
-        <Text style={style.textName}>{item.phone}</Text>
+        <Text style={style.textName}>{item.username!==''?item.username:'New user'}</Text>
+        <Text style={style.phone}>+62 {item.phone}</Text>
       </View>
-    </View>
-  }
+    </TouchableOpacity>
+  );
 
   return(
     <View style={style.parent}>
@@ -67,21 +71,8 @@ const Contact = ({navigation}) => {
             data={result}
             renderItem={renderItem}
             keyExtractor={(item) => item}
-          />
-        <View style={style.content}>
-          <View style={style.wrapper}>
-            <Thumbnail style={style.photo} source={require('../assets/5fa3e598894a4.jpg')} />
-            <View style={style.nameWrapper}>
-              <Text style={style.textName}>username</Text>
-              <Text style={style.textName}>phone</Text>
-            </View>
-          </View>
-          
-        </View>
-
+          />       
         
-        
-      <Text>Ini text</Text>
     </View>
   )
 
@@ -121,12 +112,13 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: '3%',
     // paddingVertical: '3%',
-    backgroundColor: 'tomato',
-    height: 100,
+    backgroundColor: 'white',
+    height: 60,
   },
   photo: {
     width: 46,
-    height: 46
+    height: 46,
+    alignSelf: 'center',
   },
   nameWrapper: {
     marginLeft: 15,
@@ -136,9 +128,14 @@ const style = StyleSheet.create({
     height: '100%',
     width: '100%',
     // flexDirection: 'row',
-    // alignItems: 'center',
+    justifyContent: 'center',
   },
   textName: {
-    fontSize: 13
+    fontSize: 12,
+    marginBottom: 5
+  },
+  phone: {
+    fontSize: 9,
+    color: 'grey',
   },
 })
