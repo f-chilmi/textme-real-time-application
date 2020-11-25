@@ -10,6 +10,7 @@ const BottomTabs = createBottomTabNavigator();
 
 // import screen
 import ChatRoom from './ChatRoom';
+import Contact from './Contact'
 import ContactInfo from './ContactInfo';
 import ProfileUser from './ProfileUser';
 
@@ -45,6 +46,11 @@ class Main extends Component {
               options={{headerShown: false}}
               name="ProfileUser"
               component={ProfileUser}
+            />
+            <Stack.Screen 
+              options={{headerShown: false}}
+              name="Contact"
+              component={Contact}
             />
           </Stack.Navigator>
         ) : (

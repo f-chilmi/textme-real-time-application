@@ -27,6 +27,7 @@ const Chat = ({navigation}) => {
   }, [dispatch]);
 
   const chatList = chat.data.chat
+  console.log(chatList)
   const today = moment(new Date()).format('DD/MM/YY')
 
   const chatRoom = (id_sender, id_receiver) => {
@@ -35,6 +36,9 @@ const Chat = ({navigation}) => {
   };
   const logout = () => {
     dispatch(authAction.logout())
+  }
+  const newChat = () => {
+    navigation.navigate('Contact')
   }
   const idToken = jwt_decode(auth.token)
   const renderItem = ({item}) => (
@@ -74,7 +78,7 @@ const Chat = ({navigation}) => {
         <TouchableOpacity onPress={logout}>
           <Text style={style.linked}>Edit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={style.iconRight}>
+        <TouchableOpacity style={style.iconRight} onPress={newChat}>
           <Icon name="create" type="MaterialIcons" size={20} color="#0000cd" />
         </TouchableOpacity>
       </View>

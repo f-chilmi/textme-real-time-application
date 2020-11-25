@@ -3,13 +3,21 @@ import {View, StyleSheet, Text, TouchableOpacity, Image, ScrollView} from 'react
 import {Thumbnail} from 'native-base'
 import {Header, Input} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons'
+import auth from '../redux/actions/auth';
+import chat from '../redux/actions/chat'
+import {connect} from 'react-redux';
+import {API_URL} from '@env';
+import jwt_decode from "jwt-decode"
 
-export default class ContactInfo extends Component {
+class ContactInfo extends Component {
   state = {
     nama: 'Furoidah Chilmi',
     phone: '+62 813 2868 6883'
   }
   render() {
+    const { user1, user2 } = this.props.chat
+    const idToken = jwt_decode(this.props.auth.token)
+    console.log(this.props)
     return (
       <View style={style.parent}>
         <Header 
@@ -22,13 +30,27 @@ export default class ContactInfo extends Component {
 
         <ScrollView>
           <View style={style.imageWrapper}>
-            <Image source={require('../assets/5fa3e598894a4.jpg')} style={style.image}/>
+          {user1.id===idToken.detailUser.id ? (
+              user2.picture===null ? 
+                (<Thumbnail style={style.image} source={require('../assets/5fa3e598894a4.jpg')} />) : 
+                (<Thumbnail style={style.image} source={{uri: `${API_URL}/${user2.picture}`}} />)
+            ) : (
+              user1.picture===null ? 
+                (<Thumbnail small source={require('../assets/5fa3e598894a4.jpg')} />) : 
+                (<Thumbnail style={style.image} source={{uri: `${API_URL}/${user1.picture}`}} />)
+            )}
+            {/* <Image source={require('../assets/5fa3e598894a4.jpg')} style={style.image}/> */}
           </View>
 
           <View style={style.info}>
             <View>
-              <Text style={style.name}>{this.state.nama}</Text>
-              <Text style={style.phone}>{this.state.phone}</Text>
+              {user1.id===idToken.detailUser.id && <Text style={style.name}>{user2.username}</Text>}
+              {user2.id===idToken.detailUser.id && <Text style={style.name} >{user1.username}</Text>}
+
+              {user1.id===idToken.detailUser.id && <Text style={style.phone}>+62 {user2.phone}</Text>}
+              {user2.id===idToken.detailUser.id && <Text style={style.phone} >+62 {user1.phone}</Text>}
+              {/* <Text style={style.name}>{this.state.nama}</Text>
+              <Text style={style.phone}>{this.state.phone}</Text> */}
             </View>
             <View style={style.icons}>
               <View style={style.iconWrap}>
@@ -114,6 +136,17 @@ export default class ContactInfo extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  chat: state.chat
+});
+
+const mapDispatchToProps = {
+  login: auth.auth,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactInfo)
 
 const style = StyleSheet.create({
   parent: {
