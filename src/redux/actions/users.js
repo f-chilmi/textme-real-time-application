@@ -9,5 +9,9 @@ export default {
   getAllUser: (token) => ({
     type: 'ALL_PROFILE',
     payload: http(token).get('/users/all')
+  }),
+  editUser: (token, data) => ({
+    type: 'EDIT',
+    payload: http(token).patch('/users', qs.stringify(data))
   })
 }

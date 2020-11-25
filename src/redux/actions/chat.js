@@ -13,5 +13,9 @@ export default {
   privateChat: (token, id_sender, id_receiver) => ({
     type: 'DETAIL_CHAT',
     payload: http(token).get(`/message/${id_sender}/${id_receiver}`)
+  }),
+  sendChat: (token, dataSend) => ({
+    type: 'SEND_CHAT',
+    payload: http(token).post('/message', qs.stringify(dataSend))
   })
 }

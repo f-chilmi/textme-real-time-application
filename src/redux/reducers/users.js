@@ -4,6 +4,7 @@ const initialState = {
   alertMsg: '',
   data: {},
   allUser: {},
+  dataPatch: {},
 }
 
 export default (state = initialState, action) => {
@@ -48,6 +49,27 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         allUser: action.payload.data
+      }
+    }
+    case 'EDIT_PENDING': {
+      return {
+        ...state,
+        isLoading: true
+      }
+    }
+    case 'EDIT_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Failed update user'
+      }
+    }
+    case 'EDIT_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        dataPatch: action.payload.data
       }
     }
     default: {

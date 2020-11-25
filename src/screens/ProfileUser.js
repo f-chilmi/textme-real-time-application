@@ -10,12 +10,17 @@ import {connect} from 'react-redux';
 
 class ProfileUser extends Component {
   state={
-    nama: 'Furoidah Chilmi',
-    phone: '+62 813 2868 6883',
+    nama: '',
+    phone: '',
     picture: '',
   }
   componentDidMount(){
     this.props.getUser(this.props.auth.token)
+    const {result} = this.props.users.data
+    this.setState({
+      nama: result.username,
+      picture: result.picture
+    })
   }
   handleChoosePhoto = () => {
     const options = {};
@@ -33,8 +38,15 @@ class ProfileUser extends Component {
       }
     });
   };
+  saveEditName = () => {
+    const data = { username: this.state.nama }
+    console.log(data)
+    this.props.editUser(this.props.auth.token, data)
+  }
   render() {
-    console.log(this.props)
+    console.log(this.state)
+    const {result} = this.props.users.data
+    // console.log(result)
     return (
       <KeyboardAvoidingView style={style.parent}>
         <Header 
@@ -64,10 +76,10 @@ class ProfileUser extends Component {
               onChange={(text)=>this.setState({nama: text})}
             /> */}
             <TextInput
-              value={this.state.nama}
+              value={this.state.nama===null?'New user':this.state.nama}
               style={style.containerStyle}
-              onChange={(text)=>this.setState({nama: text})}
-              // onSubmitEditing={}
+              onChangeText={(text)=>this.setState({nama: text})}
+              onSubmitEditing={this.saveEditName}
             />
           </View>
         </View>
@@ -76,7 +88,7 @@ class ProfileUser extends Component {
           <Text style={style.greyText}>NOMOR TELEPON</Text>
         </View>
         <View style={style.inputNumberWrapper}>
-          <Text style={style.inputStyle0}>{this.state.phone}</Text>
+          <Text style={style.inputStyle0}> +62 {result.phone} </Text>
         </View>
 
         <View style={style.textWrapper}>
@@ -102,6 +114,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   login: auth.auth,
   getUser: users.getUser,
+  editUser: users.editUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileUser)

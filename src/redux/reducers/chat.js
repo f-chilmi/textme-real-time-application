@@ -4,6 +4,7 @@ const initialState = {
   alertMsg: '',
   data: {},
   detail: {},
+  chatSent: {},
 }
 
 export default (state = initialState, action) => {
@@ -48,6 +49,27 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         detail: action.payload.data
+      }
+    }
+    case 'SEND_CHAT_PENDING': {
+      return {
+        ...state,
+        isLoading: true
+      }
+    }
+    case 'SEND_CHAT_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Failed get data'
+      }
+    }
+    case 'SEND_CHAT_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        chatSent: action.payload.data
       }
     }
     default: {

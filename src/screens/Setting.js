@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,18 +10,20 @@ import {
 import {Thumbnail} from 'native-base';
 import {useSelector, useDispatch} from 'react-redux';
 import Iconic from 'react-native-vector-icons/MaterialIcons';
-import users from '../redux/actions/users';
+import usersAction from '../redux/actions/users';
+import {API_URL} from '@env';
 
 const Setting = ({navigation}) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const users = useSelector((state) => state.users);
+  const {result} = users.data
   useEffect(() => {
-    dispatch(users.getUser(auth.token))
+    dispatch(usersAction.getUser(auth.token))
   }, [dispatch]);
   
-  console.log(auth)
-  console.log(users)
+  // console.log(result)
+  // console.log(users)
   return (
     <View style={style.parent}>
       <View style={style.header}>
@@ -31,10 +33,13 @@ const Setting = ({navigation}) => {
 
       <TouchableOpacity style={style.rowChat} onPress={()=>navigation.navigate('ProfileUser')}>
         <View style={style.thumbnailWrap}>
-          <Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />
+          {result.picture===null ?
+            <Thumbnail source={require('../assets/5fa3e598894a4.jpg')}/> :
+            <Thumbnail source={{uri: `${API_URL}/${result.picture1}`}}/>
+          }
         </View>
         <View style={style.centerTextContent}>
-          <Text style={style.sender}>Furoidah Chilmi</Text>
+          <Text style={style.sender}>{result.username===null?'New user':result.username}</Text>
           <Text style={style.content}>
             Sleeping
           </Text>

@@ -29,7 +29,6 @@ const Chat = ({navigation}) => {
 
   const chatList = chat.data.chat
   const today = moment(new Date()).format('DD/MM/YY')
-  const hour = moment(chat.data.createdAt).format('hh:mm')
 
   const chatRoom = (id_sender, id_receiver) => {
     dispatch(chatAction.privateChat(auth.token, id_sender, id_receiver))
@@ -39,15 +38,13 @@ const Chat = ({navigation}) => {
     dispatch(authAction.logout())
   }
   const idToken = jwt_decode(auth.token)
-  console.log(idToken.detailUser.id)
-  console.log(auth)
-  console.log(users)
   const renderItem = ({item}) => (
     <TouchableOpacity style={style.rowChat} onPress={()=>chatRoom(item.id_sender, item.id_receiver)} key={item.id.toString().concat(item.message)}>
       <View style={style.thumbnailWrap}>
         <Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />
       </View>
       <View style={style.centerTextContent}>
+        {/* {item.id_sender===idToken.detailUser.id && <Text style={style.sender}>{item.}</Text>} */}
         <Text style={style.sender}>Nama pengirim</Text>
         <Text style={style.content}> 
           {item.message.length > 80
@@ -57,7 +54,7 @@ const Chat = ({navigation}) => {
       </View>
       <View>
         {today===moment(item.createdAt).format('DD/MM/YY') ? (
-          <Text style={style.content}> {hour}</Text>
+          <Text style={style.content}> {moment(item.createdAt).format('HH:mm')}</Text>
         ):(
         <Text style={style.content}>{moment(item.createdAt).format('DD/MM/YY')}</Text>
         )}

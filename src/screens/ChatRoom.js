@@ -8,12 +8,13 @@ import {Header, Input} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import {connect} from 'react-redux';
 import auth from '../redux/actions/auth';
-import chat from '../redux/actions/chat';
+import chatAction from '../redux/actions/chat';
 
 class ChatRoom extends Component {
   state = {
     picture: '',
     chat: '',
+    id_receiver: '',
   }
   contactInfo = () => {
     this.props.navigation.navigate('ContactInfo')
@@ -34,13 +35,21 @@ class ChatRoom extends Component {
       }
     });
   };
+  sendChat = () => {
+    const idToken = jwt_decode(this.props.auth.token)
+    const { id_receiver, chat } = this.state
+    const dataSend = {id_receiver, chat}
+    this.props.sendChat(this.props.auth.token, dataSend)
+    this.props.privateChat(this.props.auth.token, idToken.detailUser.id, id_receiver)
+  }
   render() {
-    console.log(this.props)
+    // console.log(this.props)
     const idToken = jwt_decode(this.props.auth.token)
     const { chat } = this.props.chat.detail
     const today = moment(new Date()).format('DD/MM/YY')
-    console.log(chat)
-    console.log(idToken.detailUser.id)
+    console.log(this.state)
+    // console.log(chat)
+    // console.log(idToken.detailUser.id)
     return (
       <View style={style.parent}>
         <Header 
@@ -68,7 +77,11 @@ class ChatRoom extends Component {
           <ScrollView style={{padding: '3%'}}>
             {chat.map(item=>(
               item.id_sender===idToken.detailUser.id ? (
-                <View style={style.chatReceive}>
+                <View style={style.chatSend}>
+                  {this.state.id_receiver===item.id_receiver ? 
+                  console.log('id receiver updated') : 
+                  this.setState({id_receiver: item.id_receiver})}
+                  {console.log(item.id_sender)}
                   <Text style={style.textChat}> {item.message} </Text>
                   {today===moment(item.createdAt).format('DD/MM/YY') ? (
                     <Text style={style.time}> {moment(item.createdAt).format('HH:mm')} </Text>
@@ -77,7 +90,12 @@ class ChatRoom extends Component {
                   )}
                 </View>
               ) : (
-                <View style={style.chatSend}>
+                <View style={style.chatReceive}>
+                  {console.log(item.id_sender)}
+                  {console.log(item.id_receiver)}
+                  {this.state.id_receiver===item.id_sender ? 
+                  console.log('id receiver updated') : 
+                  this.setState({id_receiver: item.id_sender})}
                   <Text style={style.textChat}> {item.message} </Text>
                   {today===moment(item.createdAt).format('DD/MM/YY') ? (
                     <Text style={style.time}> {moment(item.createdAt).format('HH:mm')} </Text>
@@ -87,24 +105,11 @@ class ChatRoom extends Component {
                 </View>
               )
             ))}
-            {/* <View style={style.chatReceive}>
-              <Text style={style.textChat}>text yang sangat panjang </Text>
-              <Text style={style.time}>18.00</Text>
-            </View>
-            <View style={style.chatSend}>
-              <Text style={style.textChat}>text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang text yang sangat panjang </Text>
-              <Text style={style.time}>18.01</Text>
-            </View> */}
           </ScrollView>
         </ImageBackground>
 
         <View style={style.bottomWrapper}>
           <Iconic name='add' size={25} style={style.iconLeft} />
-          {/* <Input 
-            containerStyle={style.containerStyle}
-            inputStyle={style.inputChat}
-            inputContainerStyle={{height: '100%'}}
-          /> */}
           <TextInput 
             style={style.containerStyle}
             multiline={true}
@@ -115,7 +120,7 @@ class ChatRoom extends Component {
               <Iconic name='camera-alt' size={25}  />
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={style.iconRight}>
+            <TouchableOpacity style={style.iconRight} onPress={this.sendChat}>
               <Iconic name='send' size={25} style={style.iconRight} />
             </TouchableOpacity>
           )}
@@ -134,6 +139,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   login: auth.auth,
+  sendChat: chatAction.sendChat,
+  privateChat: chatAction.privateChat,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom)
