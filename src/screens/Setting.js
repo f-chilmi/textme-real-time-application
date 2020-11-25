@@ -35,7 +35,7 @@ const Setting = ({navigation}) => {
         <View style={style.thumbnailWrap}>
           {result.picture===null ?
             <Thumbnail source={require('../assets/5fa3e598894a4.jpg')}/> :
-            <Thumbnail source={{uri: `${API_URL}/${result.picture1}`}}/>
+            <Thumbnail source={{uri: `${API_URL}/${result.picture}`}}/>
           }
         </View>
         <View style={style.centerTextContent}>

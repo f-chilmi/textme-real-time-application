@@ -15,16 +15,15 @@ import {SearchBar} from 'react-native-elements';
 import chatAction from '../redux/actions/chat';
 import authAction from '../redux/actions/auth';
 import usersAction from '../redux/actions/users';
+import {API_URL} from '@env';
 
 const Chat = ({navigation}) => {
   const dispatch = useDispatch();
   const [search, setSearch] = React.useState('');
   const chat = useSelector((state) => state.chat);
   const auth = useSelector((state) => state.auth);
-  const users = useSelector((state) => state.users);
   useEffect(() => {
     dispatch(chatAction.getChat(auth.token))
-    dispatch(usersAction.getAllUser(auth.token))
   }, [dispatch]);
 
   const chatList = chat.data.chat
@@ -41,11 +40,17 @@ const Chat = ({navigation}) => {
   const renderItem = ({item}) => (
     <TouchableOpacity style={style.rowChat} onPress={()=>chatRoom(item.id_sender, item.id_receiver)} key={item.id.toString().concat(item.message)}>
       <View style={style.thumbnailWrap}>
-        <Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />
+        {item.id_sender===idToken.detailUser.id && item.receiver.picture===null ?  
+          (<Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />) : 
+          (<Thumbnail source={{uri: `${API_URL}/${item.receiver.picture}`}} />)}
+        {item.id_receiver===idToken.detailUser.id && item.sender.picture===null ?  
+          (<Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />) : 
+          (<Thumbnail source={{uri: `${API_URL}/${item.sender.picture}`}} />)}
+        {/* <Thumbnail source={require('../assets/5fa3e598894a4.jpg')} /> */}
       </View>
       <View style={style.centerTextContent}>
-        {/* {item.id_sender===idToken.detailUser.id && <Text style={style.sender}>{item.}</Text>} */}
-        <Text style={style.sender}>Nama pengirim</Text>
+        {item.id_sender===idToken.detailUser.id && <Text style={style.sender}>{item.receiver.username}</Text>}
+        {item.id_receiver===idToken.detailUser.id && <Text style={style.sender}>{item.sender.username}</Text>}
         <Text style={style.content}> 
           {item.message.length > 80
             ? item.message.slice(0, 81).concat('...')
