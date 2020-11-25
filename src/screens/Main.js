@@ -9,11 +9,15 @@ const Stack = createStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 // import screen
+import ChatRoom from './ChatRoom';
+import ContactInfo from './ContactInfo';
+import ProfileUser from './ProfileUser';
+
+// import Bottom Tab Navigator
+import TabNavigator from './TabNavigator'
 
 // import Stack
 import WelcomeStack from './WelcomeStack'
-import MainStack from './MainStack'
-import SettingStack from './SettingStack'
 
 class Main extends Component {
   render() {
@@ -21,31 +25,28 @@ class Main extends Component {
     return (
       <NavigationContainer>
         {this.props.auth.isLogin ? (
-          <BottomTabs.Navigator
-            tabBarOptions={{
-              activeTintColor: '#1e90ff',
-              inactiveTintColor: 'gray',
-            }}
-          >
-            <BottomTabs.Screen
-              options={{
-                tabBarIcon: ({size, color, focused}) => (
-                  <Iconic name="chat-bubble-outline" color={color} size={size} color="grey"/>
-                ),
-              }}
-              name="Chat"
-              component={MainStack}
+          <Stack.Navigator>
+            <Stack.Screen 
+              options={{headerShown: false}}
+              name="Tab"
+              component={TabNavigator}
             />
-            <BottomTabs.Screen
-              options={{
-                tabBarIcon: ({size, color, focused}) => (
-                  <Iconic name="settings" color={color} size={size} color="grey"/>
-                ),
-              }}
-              name="Setting"
-              component={SettingStack}
+            <Stack.Screen 
+              options={{headerShown: false}}
+              name="ChatRoom"
+              component={ChatRoom}
             />
-          </BottomTabs.Navigator>
+            <Stack.Screen 
+              options={{headerShown: false}}
+              name="ContactInfo"
+              component={ContactInfo}
+            />
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="ProfileUser"
+              component={ProfileUser}
+            />
+          </Stack.Navigator>
         ) : (
           <Stack.Navigator>
             <Stack.Screen 
