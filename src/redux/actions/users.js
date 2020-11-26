@@ -10,6 +10,10 @@ export default {
     type: 'ALL_PROFILE',
     payload: http(token).get('/users/all')
   }),
+  searchUser: (token, search) => ({
+    type: 'ALL_PROFILE',
+    payload: http(token).get(`/users/all?search=${search}`)
+  }),
   editUser: (token, data) => ({
     type: 'EDIT',
     payload: http(token).patch('/users', qs.stringify(data))

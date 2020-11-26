@@ -29,7 +29,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        data: action.payload.data
+        data: action.payload.data.chat.rows
       }
     }
     case 'DETAIL_CHAT_PENDING': {

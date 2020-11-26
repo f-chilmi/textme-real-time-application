@@ -4,10 +4,14 @@ import {Header, Input, Button} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons';
 import auth from '../redux/actions/auth';
 import {connect} from 'react-redux';
+import SplashScreen from 'react-native-splash-screen'
 
 class Register extends Component {
   state = {
     phone: ''
+  }
+  componentDidMount(){
+    SplashScreen.hide();
   }
   verification = () => {
     const data = {phone: this.state.phone};

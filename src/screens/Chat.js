@@ -16,6 +16,7 @@ import chatAction from '../redux/actions/chat';
 import authAction from '../redux/actions/auth';
 import usersAction from '../redux/actions/users';
 import {API_URL} from '@env';
+import SplashScreen from 'react-native-splash-screen'
 
 const Chat = ({navigation}) => {
   const dispatch = useDispatch();
@@ -23,10 +24,11 @@ const Chat = ({navigation}) => {
   const chat = useSelector((state) => state.chat);
   const auth = useSelector((state) => state.auth);
   useEffect(() => {
+    SplashScreen.hide();
     dispatch(chatAction.getChat(auth.token))
   }, [dispatch]);
 
-  const chatList = chat.data.chat
+  const chatList = chat.data
   console.log(chatList)
   const today = moment(new Date()).format('DD/MM/YY')
 
@@ -41,6 +43,11 @@ const Chat = ({navigation}) => {
     navigation.navigate('Contact')
   }
   const idToken = jwt_decode(auth.token)
+  const searchChat = () => {
+    console.log(search)
+    setSearch('')
+    dispatch(chatAction.searchChat(auth.token, search))
+  }
   const renderItem = ({item}) => (
     <TouchableOpacity style={style.rowChat} onPress={()=>chatRoom(item.id_sender, item.id_receiver)} key={item.id.toString().concat(item.message)}>
       <View style={style.thumbnailWrap}>
@@ -102,8 +109,9 @@ const Chat = ({navigation}) => {
           inputContainerStyle={style.inputcontainerStyle}
           cancelButtonProps={style.cancelButton}
           placeholder="Cari"
-          onChangeText={() => setSearch(text)}
+          onChangeText={(text) => setSearch(text)}
           value={search}
+          onSubmitEditing={searchChat}
         />
 
         <View style={style.rowDir2}>
@@ -117,7 +125,7 @@ const Chat = ({navigation}) => {
         <FlatList
           data={chatList}
           renderItem={renderItem}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.message}
           // numColumns={2}
           // onEndReached={nextPage}
           // onEndReachedThreshold={0.5}

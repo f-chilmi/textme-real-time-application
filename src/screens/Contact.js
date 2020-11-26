@@ -36,6 +36,12 @@ const Contact = ({navigation}) => {
     dispatch(chatAction.privateChat(auth.token, id_sender, id_receiver))
     navigation.navigate('ChatRoom', {id_sender, id_receiver})
   };
+  
+  const searchContact = () => {
+    setSearch('')
+    console.log(search)
+    dispatch(usersAction.searchUser(auth.token, search))
+  }
 
   const renderItem = ({item}) => (
     <TouchableOpacity style={style.wrapper} onPress={()=>chatRoom(item.id)}>
@@ -74,14 +80,15 @@ const Contact = ({navigation}) => {
           inputContainerStyle={style.inputcontainerStyle}
           cancelButtonProps={style.cancelButton}
           placeholder="Cari"
-          onChangeText={() => setSearch(text)}
+          onChangeText={(text) => setSearch(text)}
           value={search}
+          onSubmitEditing={searchContact}
         />
 
           <FlatList 
             data={result}
             renderItem={renderItem}
-            keyExtractor={(item) => item}
+            keyExtractor={(item) => item.id.toString().concat(item.username)}
           />       
         
     </View>

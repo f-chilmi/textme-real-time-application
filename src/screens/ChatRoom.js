@@ -136,7 +136,7 @@ const ChatRoom = ({navigation, route}) => {
           <FlatList
             data={chatList}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.message}
             inverted
           />
         </ScrollView>
