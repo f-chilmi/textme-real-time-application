@@ -14,20 +14,37 @@ const ChatRoom = ({navigation, route}) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const chat = useSelector((state) => state.chat);
+  
+  const idToken = jwt_decode(auth.token)
+  const chatList = chat.detail
+  const { user1, user2 } = chat
+  const today = moment(new Date()).format('DD/MM/YY')
 
   const [picture, setPicture] = React.useState('');
   const [content, setContent] = React.useState('');
 
   const {id_receiver, id_sender} = route.params
+  const [idReceiver, setReceiver] = React.useState('')
+
+  if(id_sender===idToken.detailUser.id){
+    if(idReceiver===id_receiver){
+      console.log('receiver updated')
+    } else {
+      setReceiver(id_receiver)
+    }
+    
+  } else {
+    if(idReceiver===id_sender){
+      console.log('receiver updated')
+    } else {
+      setReceiver(id_sender)
+    }
+  }
+
 
   // useEffect(() => {
   //   dispatch(chatAction.privateChat(auth.token, idToken.detailUser.id, id_receiver))
   // }, [dispatch]);
-
-  const idToken = jwt_decode(auth.token)
-  let chatList = chat.detail
-  const { user1, user2 } = chat
-  const today = moment(new Date()).format('DD/MM/YY')
 
   const contactInfo = () => {
     navigation.navigate('ContactInfo')
@@ -48,11 +65,15 @@ const ChatRoom = ({navigation, route}) => {
       }
     });
   };
-  const dataSend = {id_receiver, chat: content}
+  const dataSend = {id_receiver: idReceiver, chat: content}
   const sendChat = () => {
     setContent('')
-    chatList = [...chatList, dataSend]
     dispatch(chatAction.sendChat(auth.token, dataSend))
+    refreshChatList()
+  }
+
+  const refreshChatList = () => {
+    dispatch(chatAction.getChat(auth.token))
   }
 
   const renderItem = ({item}) => (

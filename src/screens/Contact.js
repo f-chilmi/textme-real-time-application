@@ -11,23 +11,34 @@ import {Thumbnail, Icon} from 'native-base';
 import {Header, SearchBar} from 'react-native-elements'
 import {useSelector, useDispatch} from 'react-redux';
 import usersAction from '../redux/actions/users';
+import chatAction from '../redux/actions/chat';
 import {API_URL} from '@env';
+import jwt_decode from "jwt-decode"
 
 const Contact = ({navigation}) => {
   const [search, setSearch] = React.useState('');
   const auth = useSelector((state) => state.auth);
   const users = useSelector((state) => state.users);
+  const idToken = jwt_decode(auth.token)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(usersAction.getAllUser(auth.token))
   }, [dispatch]);
 
+
+  const id_sender = idToken.detailUser.id
   const {result} = users.allUser
-  console.log(result)
+  // console.log(result)
+
+  const chatRoom = (id) => {
+    const id_receiver = id
+    console.log(id_sender, id_receiver)
+    dispatch(chatAction.privateChat(auth.token, id_sender, id_receiver))
+    navigation.navigate('ChatRoom', {id_sender, id_receiver})
+  };
 
   const renderItem = ({item}) => (
-    <TouchableOpacity style={style.wrapper}>
-      {console.log(item)}
+    <TouchableOpacity style={style.wrapper} onPress={()=>chatRoom(item.id)}>
       {item.picture===null?(
         <Thumbnail style={style.photo} source={require('../assets/5fa3e598894a4.jpg')} />
       ) : (

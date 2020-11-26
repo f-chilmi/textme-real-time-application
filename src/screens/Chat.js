@@ -51,7 +51,7 @@ const Chat = ({navigation}) => {
         ) : (
           item.id_sender.picture===null ? 
             (<Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />) : 
-            (<Thumbnail source={{uri: `${API_URL}/${item.id_sender.picture}`}} />)
+            (<Thumbnail source={{uri: `${API_URL}/${item.sender.picture}`}} />)
         )}
       </View>
       <View style={style.centerTextContent}>
