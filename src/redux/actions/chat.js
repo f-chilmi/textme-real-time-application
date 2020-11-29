@@ -25,5 +25,8 @@ export default {
   sendChat: (token, dataSend) => ({
     type: 'SEND_CHAT',
     payload: http(token).post('/message', qs.stringify(dataSend))
+  }),
+  deleteData: () => ({
+    type: 'DELETE'
   })
 }

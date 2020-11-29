@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
+import {useFocusEffect} from '@react-navigation/native'
 import {useSelector, useDispatch} from 'react-redux';
-import {View, StyleSheet, TouchableOpacity, ScrollView, Text, ImageBackground, TextInput, FlatList} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, ScrollView, Text, ImageBackground, TextInput, FlatList, BackHandler} from 'react-native';
 import Iconic from 'react-native-vector-icons/MaterialIcons';
 import jwt_decode from "jwt-decode"
 import moment from 'moment'
@@ -15,7 +16,7 @@ const ChatRoom = ({navigation, route}) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const chat = useSelector((state) => state.chat);
-  
+
   const idToken = jwt_decode(auth.token)
   const chatList = chat.detail
   const { user1, user2 } = chat
@@ -29,21 +30,17 @@ const ChatRoom = ({navigation, route}) => {
 
   if(id_sender===idToken.detailUser.id){
     if(idReceiver===id_receiver){
-      console.log('receiver updated')
+      null
     } else {
       setReceiver(id_receiver)
     }
   } else {
     if(idReceiver===id_sender){
-      console.log('receiver updated')
+      null
     } else {
       setReceiver(id_sender)
     }
   }
-
-  // useEffect(() => {
-  //   dispatch(chatAction.privateChat(auth.token, idToken.detailUser.id, id_receiver))
-  // }, [dispatch]);
 
   useEffect(() => {
     socket.on(idToken.detailUser.id, () => {
@@ -51,10 +48,24 @@ const ChatRoom = ({navigation, route}) => {
       dispatch(chatAction.privateChat(auth.token, idToken.detailUser.id, id_receiver))
       dispatch(chatAction.getChat(auth.token))
     });
+    // BackHandler.addEventListener('hardwareBackPress', deleteData);
     return () => {
       socket.close();
+      // BackHandler.removeEventListener('hardwareBackPress', deleteData)
     };
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const deleteData = () => {
+        console.log('delete called')
+        dispatch(chatAction.deleteData())
+      }
+      BackHandler.addEventListener('hardwareBackPress', deleteData);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', deleteData);
+    }, [])
+  );
 
   const contactInfo = () => {
     navigation.navigate('ContactInfo')

@@ -12,6 +12,14 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case 'DELETE': {
+      return {
+        ...state,
+        detail: {},
+        user1: {},
+        user2: {},
+      }
+    }
     case 'CHAT_LIST_PENDING': {
       return {
         ...state,
