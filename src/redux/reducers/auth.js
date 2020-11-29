@@ -42,7 +42,9 @@ export default (state = initialState, action) => {
         ...state,
         isLogin: false,
         // token: '',
-        alertMsg: 'Logout successfully'
+        alertMsg: 'Logout successfully',
+        alertMsg: '',
+        phone: {}
       }
     }
     default: {

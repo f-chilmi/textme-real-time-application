@@ -11,6 +11,8 @@ import {Thumbnail} from 'native-base';
 import {useSelector, useDispatch} from 'react-redux';
 import Iconic from 'react-native-vector-icons/MaterialIcons';
 import usersAction from '../redux/actions/users';
+import authAction from '../redux/actions/auth';
+import chatAction from '../redux/actions/chat';
 import {API_URL} from '@env';
 
 const Setting = ({navigation}) => {
@@ -21,8 +23,14 @@ const Setting = ({navigation}) => {
   useEffect(() => {
     dispatch(usersAction.getUser(auth.token))
   }, [dispatch]);
+
+  const logout = () => {
+    dispatch(authAction.logout())
+    dispatch(chatAction.logout())
+    dispatch(usersAction.logout())
+  }
   
-  console.log(result)
+  // console.log(result)
   // console.log(users)
   return (
     <View style={style.parent}>
@@ -121,7 +129,15 @@ const Setting = ({navigation}) => {
         </View>
       </TouchableOpacity>
 
-      <View style={{height: 40}}></View>
+      <TouchableOpacity style={style.list} onPress={logout}>
+        <View style={{backgroundColor: 'grey', borderRadius: 5, height: 30, width: 30, justifyContent: 'center', alignItems: 'center'}}>
+          <Iconic name="power-settings-new" size={22} color="white" />
+        </View>
+        <View style={style.textWrapper1}>
+          <Text style={style.textList}>Logout</Text>
+          <Iconic name="keyboard-arrow-right" color="lightgrey" size={23}  style={style.iconRight} />
+        </View>
+      </TouchableOpacity>
 
         
       </ScrollView>

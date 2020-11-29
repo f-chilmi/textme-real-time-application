@@ -21,5 +21,8 @@ export default {
   editPicture: (token, data) => ({
     type: 'EDIT',
     payload: http(token).patch('/users', data)
+  }),
+  logout: () => ({
+    type: 'LOGOUT'
   })
 }

@@ -41,12 +41,12 @@ class ProfileUser extends Component {
   };
   saveEditName = () => {
     const data = { username: this.state.nama }
-    console.log(data)
+    // console.log(data)
     this.props.editUser(this.props.auth.token, data)
   }
   render() {
-    console.log(this.state)
-    console.log(this.props)
+    // console.log(this.state)
+    // console.log(this.props)
     const result = this.props.users.data
     // console.log(result)
     return (

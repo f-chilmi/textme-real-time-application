@@ -9,6 +9,17 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case 'LOGOUT': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        alertMsg: '',
+        data: {},
+        allUser: {},
+        dataPatch: {},
+      }
+    }
     case 'PROFILE_USER_PENDING': {
       return {
         ...state,

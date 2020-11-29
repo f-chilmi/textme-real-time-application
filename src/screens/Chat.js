@@ -49,16 +49,13 @@ const Chat = ({navigation}) => {
   }, []);
 
   const chatList = chat.data
-  console.log(chatList)
   const today = moment(new Date()).format('DD/MM/YY')
 
   const chatRoom = (id_sender, id_receiver) => {
     dispatch(chatAction.privateChat(auth.token, id_sender, id_receiver))
     navigation.navigate('ChatRoom', {id_sender, id_receiver})
   };
-  const logout = () => {
-    dispatch(authAction.logout())
-  }
+
   const newChat = () => {
     navigation.navigate('Contact')
   }
@@ -95,7 +92,7 @@ const Chat = ({navigation}) => {
             : item.message} 
         </Text>
       </View>
-      <View>
+      <View style={{marginLeft: 'auto'}}>
         {today===moment(item.createdAt).format('DD/MM/YY') ? (
           <Text style={style.content}> {moment(item.createdAt).format('HH:mm')}</Text>
         ):(
@@ -107,7 +104,7 @@ const Chat = ({navigation}) => {
   return (
     <View style={style.parent}>
       <View style={style.rowDir}>
-        <TouchableOpacity onPress={logout}>
+        <TouchableOpacity >
           <Text style={style.linked}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity style={style.iconRight} onPress={newChat}>
@@ -214,6 +211,7 @@ const style = StyleSheet.create({
     paddingVertical: '2%',
     flexDirection: 'row',
     height: 70,
+    flex: 1,
     // backgroundColor: 'yellow',
     borderTopWidth: 0.5,
     borderBottomWidth: 0.5,
@@ -223,8 +221,7 @@ const style = StyleSheet.create({
     marginRight: 10,
   },
   centerTextContent: {
-    width: 220,
-    // backgroundColor: 'yellow',
+    // width: '100%',
   },
   sender: {
     fontWeight: '700',
