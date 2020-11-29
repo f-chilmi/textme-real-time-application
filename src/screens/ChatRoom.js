@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {useFocusEffect} from '@react-navigation/native'
 import {useSelector, useDispatch} from 'react-redux';
-import {View, StyleSheet, TouchableOpacity, ScrollView, Text, ImageBackground, TextInput, FlatList, BackHandler} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, ScrollView, Text, ImageBackground, TextInput, FlatList, BackHandler, ActivityIndicator} from 'react-native';
 import Iconic from 'react-native-vector-icons/MaterialIcons';
 import jwt_decode from "jwt-decode"
 import moment from 'moment'
@@ -27,7 +27,7 @@ const ChatRoom = ({navigation, route}) => {
 
   const {id_receiver, id_sender} = route.params
   const [idReceiver, setReceiver] = React.useState('')
-
+  console.log(chatList)
   if(id_sender===idToken.detailUser.id){
     if(idReceiver===id_receiver){
       null
@@ -154,14 +154,22 @@ const ChatRoom = ({navigation, route}) => {
       />
 
       <ImageBackground style={style.imageBackground} source={require('../assets/5fa3e598894a4.jpg')} >
-        <ScrollView style={{padding: '3%'}}>
-          <FlatList
-            data={chatList}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.message.concat(item.id)}
-            inverted
-          />
-        </ScrollView>
+        {chatList.length > 1 ?
+        (
+          <ScrollView style={{padding: '3%'}}>
+            <FlatList
+              data={chatList}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.message.concat(item.id)}
+              inverted
+            />
+          </ScrollView>
+        ) : (
+          <View style={{flex:1, justifyContent: 'center', alignItems: 'center',}}>
+            <ActivityIndicator style={{backgroundColor: 'white', opacity: 0.4, height: '100%', width: '100%'}} size="large" color="black" />
+          </View>
+        )}
+        
       </ImageBackground>
 
       <View style={style.bottomWrapper}>
