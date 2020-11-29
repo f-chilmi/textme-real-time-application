@@ -24,7 +24,11 @@ class ProfileUser extends Component {
     })
   }
   handleChoosePhoto = () => {
-    const options = {};
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 1000,
+      maxHeight: 1000,
+    };
     ImagePicker.showImagePicker(options, (response) => {
       console.log(response);
       if (response.uri) {

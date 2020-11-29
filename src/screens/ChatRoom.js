@@ -48,18 +48,16 @@ const ChatRoom = ({navigation, route}) => {
       dispatch(chatAction.privateChat(auth.token, idToken.detailUser.id, id_receiver))
       dispatch(chatAction.getChat(auth.token))
     });
-    // BackHandler.addEventListener('hardwareBackPress', deleteData);
     return () => {
       socket.close();
-      // BackHandler.removeEventListener('hardwareBackPress', deleteData)
     };
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       const deleteData = () => {
-        console.log('delete called')
         dispatch(chatAction.deleteData())
+        dispatch(chatAction.getChat(auth.token))
       }
       BackHandler.addEventListener('hardwareBackPress', deleteData);
       return () =>
@@ -154,8 +152,7 @@ const ChatRoom = ({navigation, route}) => {
       />
 
       <ImageBackground style={style.imageBackground} source={require('../assets/5fa3e598894a4.jpg')} >
-        {chatList.length > 1 ?
-        (
+      {chatList==undefined ? (
           <ScrollView style={{padding: '3%'}}>
             <FlatList
               data={chatList}
@@ -165,10 +162,36 @@ const ChatRoom = ({navigation, route}) => {
             />
           </ScrollView>
         ) : (
+          chatList.length > 0 ? (
+            <ScrollView style={{padding: '3%'}}>
+              <FlatList
+                data={chatList}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.message.concat(item.id)}
+                inverted
+              />
+            </ScrollView>
+          ) : (
+            <View style={{flex:1, justifyContent: 'center', alignItems: 'center',}}>
+              <ActivityIndicator style={{backgroundColor: 'white', opacity: 0.4, height: '100%', width: '100%'}} size="large" color="black" />
+            </View>
+          )
+        )}
+        {/* {chatList.length > 1 && (
+          <ScrollView style={{padding: '3%'}}>
+            <FlatList
+              data={chatList}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.message.concat(item.id)}
+              inverted
+            />
+          </ScrollView>
+        )}
+        {chatList.length < 1 && (
           <View style={{flex:1, justifyContent: 'center', alignItems: 'center',}}>
             <ActivityIndicator style={{backgroundColor: 'white', opacity: 0.4, height: '100%', width: '100%'}} size="large" color="black" />
           </View>
-        )}
+        )} */}
         
       </ImageBackground>
 

@@ -11,7 +11,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import moment from 'moment'
 import jwt_decode from "jwt-decode"
 import {Icon, Thumbnail} from 'native-base';
-import {SearchBar} from 'react-native-elements';
+import {SearchBar, Button} from 'react-native-elements';
 import chatAction from '../redux/actions/chat';
 import authAction from '../redux/actions/auth';
 import {API_URL} from '@env';
@@ -115,6 +115,7 @@ const Chat = ({navigation}) => {
       <View style={style.header}>
         <Text style={style.title}>Chat</Text>
       </View>
+      
       <ScrollView>
         <SearchBar
           platform="ios"
@@ -144,7 +145,27 @@ const Chat = ({navigation}) => {
             <Text style={style.linked}>Grup Baru</Text>
           </TouchableOpacity>
         </View>
-        <FlatList
+        {chatList.length > 0 ? (
+          <FlatList
+            data={chatList}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.message}
+            refreshing={loading}
+            onRefresh={getData}
+          />
+        ) : (
+          <View style={style.buttonWrapper}>
+            <Button 
+              raised
+              title="Mulai chat baru"
+              type="outline"
+              containerStyle={style.containerStyleButton}
+              buttonStyle={style.buttonStyle}
+              onPress={newChat}
+            />
+          </View>
+        )}
+        {/* <FlatList
           data={chatList}
           renderItem={renderItem}
           keyExtractor={(item) => item.message}
@@ -153,7 +174,7 @@ const Chat = ({navigation}) => {
           // onEndReachedThreshold={0.05}
           refreshing={loading}
           onRefresh={getData}
-        />
+        /> */}
       </ScrollView>
     </View>
   );
@@ -167,6 +188,10 @@ const style = StyleSheet.create({
     // marginTop: 25,
     padding: '3%',
     backgroundColor: 'white',
+  },
+  buttonWrapper: {
+    flex: 1,
+    // backgroundColor: 'yellow'
   },
   linked: {
     color: '#1e90ff',
@@ -230,5 +255,16 @@ const style = StyleSheet.create({
   content: {
     fontSize: 9,
     color: 'grey',
+  },
+  containerStyleButton: {
+    width: '50%',
+    height: 40,
+    marginTop: '90%',
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  buttonStyle: {
+    width: '100%',
+    height: '100%'
   },
 });
