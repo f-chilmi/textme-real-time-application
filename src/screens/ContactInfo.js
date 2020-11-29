@@ -9,6 +9,8 @@ import {connect} from 'react-redux';
 import {API_URL} from '@env';
 import jwt_decode from "jwt-decode"
 
+console.log(API_URL)
+
 class ContactInfo extends Component {
   state = {
     nama: 'Furoidah Chilmi',
@@ -36,7 +38,7 @@ class ContactInfo extends Component {
                 (<Thumbnail style={style.image} source={{uri: `${API_URL}/${user2.picture}`}} />)
             ) : (
               user1.picture===null ? 
-                (<Thumbnail small source={require('../assets/5fa3e598894a4.jpg')} />) : 
+                (<Thumbnail style={style.image} source={require('../assets/5fa3e598894a4.jpg')} />) : 
                 (<Thumbnail style={style.image} source={{uri: `${API_URL}/${user1.picture}`}} />)
             )}
             {/* <Image source={require('../assets/5fa3e598894a4.jpg')} style={style.image}/> */}

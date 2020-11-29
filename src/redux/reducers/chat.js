@@ -7,6 +7,7 @@ const initialState = {
   chatSent: {},
   user1: {},
   user2: {},
+  pageInfo: {},
 }
 
 export default (state = initialState, action) => {
@@ -29,7 +30,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        data: action.payload.data.chat.rows
+        data: action.payload.data.chat.rows,
+        pageInfo: action.payload.data.pageInfo,
       }
     }
     case 'DETAIL_CHAT_PENDING': {

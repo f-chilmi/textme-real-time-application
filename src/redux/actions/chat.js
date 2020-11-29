@@ -10,6 +10,10 @@ export default {
     type: 'CHAT_LIST',
     payload: http(token).get('/message')
   }),
+  nextPrevChat: (token, url) => ({
+    type: 'CHAT_LIST',
+    payload: http(token).get(`${url}`)
+  }),
   searchChat: (token, search) => ({
     type: 'CHAT_LIST',
     payload: http(token).get(`/message?search=${search}`)

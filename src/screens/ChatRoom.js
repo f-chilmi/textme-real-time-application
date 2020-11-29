@@ -9,6 +9,7 @@ import {Header} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import chatAction from '../redux/actions/chat';
 import {API_URL} from '@env';
+import socket from '../helpers/socket'
 
 const ChatRoom = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -32,7 +33,6 @@ const ChatRoom = ({navigation, route}) => {
     } else {
       setReceiver(id_receiver)
     }
-    
   } else {
     if(idReceiver===id_sender){
       console.log('receiver updated')
@@ -41,10 +41,20 @@ const ChatRoom = ({navigation, route}) => {
     }
   }
 
-
   // useEffect(() => {
   //   dispatch(chatAction.privateChat(auth.token, idToken.detailUser.id, id_receiver))
   // }, [dispatch]);
+
+  useEffect(() => {
+    socket.on(idToken.detailUser.id, () => {
+      console.log('socket inside chatroom called')
+      dispatch(chatAction.privateChat(auth.token, idToken.detailUser.id, id_receiver))
+      dispatch(chatAction.getChat(auth.token))
+    });
+    return () => {
+      socket.close();
+    };
+  }, []);
 
   const contactInfo = () => {
     navigation.navigate('ContactInfo')
@@ -70,6 +80,7 @@ const ChatRoom = ({navigation, route}) => {
     setContent('')
     dispatch(chatAction.sendChat(auth.token, dataSend))
     refreshChatList()
+    // socket.io.emit(idReceiver, {id_receiver: id, id_sender: idToken.detailUser.id, message: content})
   }
 
   const refreshChatList = () => {
@@ -136,7 +147,7 @@ const ChatRoom = ({navigation, route}) => {
           <FlatList
             data={chatList}
             renderItem={renderItem}
-            keyExtractor={(item) => item.message}
+            keyExtractor={(item) => item.message.concat(item.id)}
             inverted
           />
         </ScrollView>

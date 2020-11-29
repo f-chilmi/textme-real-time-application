@@ -1,86 +1,106 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
+import {useSelector, useDispatch} from 'react-redux';
 import {View, StyleSheet, Text, TouchableOpacity, SafeAreaView} from 'react-native'
 import {Header, Input, Button} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons';
-import auth from '../redux/actions/auth';
-import {connect} from 'react-redux';
+import authAction from '../redux/actions/auth';
 import SplashScreen from 'react-native-splash-screen'
+import * as yup from 'yup'
+import {Formik} from 'formik'
 
-class Register extends Component {
-  state = {
-    phone: ''
-  }
-  componentDidMount(){
+const Register = ({navigation}) => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
+  useEffect(()=>{
     SplashScreen.hide();
-  }
-  verification = () => {
-    const data = {phone: this.state.phone};
-    this.props.setPhone(data);
-    this.props.navigation.navigate('Verification');
-  }
+  })
 
-  render() {
-    // console.log(this.state)
-    // console.log(this.props)
+  // const verification = () => {
+  //   const data = {phone};
+  //   dispatch(authAction.setPhone(data))
+  //   navigation.navigate('Verification');
+  // }
+  const signup = yup.object().shape({
+    phone: yup.string()
+      .min(9, 'Please insert a valid number')
+      .max(13, 'Please insert a valid number')
+      .required('Please insert your number'),
+  });
+
     return (
       <SafeAreaView style={style.parent}>
         <Header
           backgroundColor="transparent"
           centerComponent={{ text: 'Masukkan nomor telepon Anda', style: { color: 'black', fontSize: 13 }, }}
-          rightComponent={<Iconic onPress={this.register} name='more-vert' color='grey' size={28} />}
+          rightComponent={<Iconic name='more-vert' color='grey' size={28} />}
           centerContainerStyle={{flex: 5}}
         />
-        
-        <View style={style.rowDir}>
-          <Text style={style.smallText}>TextMe akan mengirimkan SMS untuk memverifikasi nomor telepon Anda.<Text style={style.linkedText}> Berapa nomor saya?</Text></Text>
 
-          <View style={style.inputWrapper}>
-            <Input 
-              containerStyle={style.containerStyle}
-              inputStyle={style.inputStyle0}
-              value="Indonesia"
-            />
-            <View style={style.inputDir}>
-              <Input 
-                containerStyle={style.containerStyleLeft}
-                inputStyle={style.inputStyle}
-                value="+62"
-              />
-              <Input 
-                containerStyle={style.containerStyleRight}
-                inputStyle={style.inputStyle}
-                onChangeText={(text)=>this.setState({phone: text})}
-              />
+        <Formik 
+          initialValues={{phone: ''}}
+          validationSchema={signup}
+          onSubmit={(value)=>{
+            dispatch(authAction.setPhone(value))
+            navigation.navigate('Verification');
+          }}
+        >
+          {({handleChange, handleSubmit, values, errors})=>(
+            <>
+            <View style={style.rowDir}>
+              <Text style={style.smallText}>TextMe akan mengirimkan SMS untuk memverifikasi nomor telepon Anda.<Text style={style.linkedText}> Berapa nomor saya?</Text></Text>
+
+              <View style={style.inputWrapper}>
+                <Input 
+                  containerStyle={style.containerStyle}
+                  inputStyle={style.inputStyle0}
+                  value="Indonesia"
+                />
+                <View style={style.inputDir}>
+                  <Input 
+                    containerStyle={style.containerStyleLeft}
+                    inputStyle={style.inputStyle}
+                    value="+62"
+                  />
+                  {/* <Input 
+                    containerStyle={style.containerStyleRight}
+                    inputStyle={style.inputStyle}
+                    onChangeText={(text)=>this.setState({phone: text})}
+                  /> */}
+                  <Input 
+                    containerStyle={style.containerStyleRight}
+                    inputStyle={style.inputStyle}
+                    onChangeText={handleChange('phone')}
+                    // value={values.phone}
+                    onSubmitEditing={handleSubmit}
+                    keyboardType='number-pad'
+                  />
+                </View>
+                <Text style={style.smallText}>Biaya SMS operator telepon mungkin berlaku</Text>
+              </View>
+
             </View>
-            <Text style={style.smallText}>Biaya SMS operator telepon mungkin berlaku</Text>
-          </View>
 
-        </View>
-
-        <Button 
-          raised
-          title="Lanjut"
-          type="outline"
-          onPress={this.verification}
-          containerStyle={style.containerStyleButton}
-          buttonStyle={style.buttonStyle}
-        />
-
+            {errors.phone ? (
+              <Text style={{color: 'red', textAlign: 'center', fontSize: 10}}>{errors.phone}</Text>
+            ) : null}
+            <Button 
+              raised
+              title="Lanjut"
+              type="outline"
+              onPress={handleSubmit}
+              containerStyle={style.containerStyleButton}
+              buttonStyle={style.buttonStyle}
+            />
+            </>
+          )}
+        </Formik>
+      
       </SafeAreaView>
     )
-  }
 }
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-const mapDispatchToProps = {
-  setPhone: auth.setPhone,
-  login: auth.auth,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Register)
+export default Register
 
 const style = StyleSheet.create({
   parent: {

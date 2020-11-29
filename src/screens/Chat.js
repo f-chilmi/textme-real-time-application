@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -14,19 +14,39 @@ import {Icon, Thumbnail} from 'native-base';
 import {SearchBar} from 'react-native-elements';
 import chatAction from '../redux/actions/chat';
 import authAction from '../redux/actions/auth';
-import usersAction from '../redux/actions/users';
 import {API_URL} from '@env';
 import SplashScreen from 'react-native-splash-screen'
+import socket from '../helpers/socket';
 
 const Chat = ({navigation}) => {
   const dispatch = useDispatch();
   const [search, setSearch] = React.useState('');
+  const [loading, setLoading] = useState(false);
+  const [sender, setSender] = useState('')
+  const [receiver, setReceiver] = useState('')
   const chat = useSelector((state) => state.chat);
   const auth = useSelector((state) => state.auth);
+  const idToken = jwt_decode(auth.token)
+  const { id } = idToken.detailUser
+
+  const getData = () => {
+    dispatch(chatAction.getChat(auth.token))
+  }
+
   useEffect(() => {
     SplashScreen.hide();
-    dispatch(chatAction.getChat(auth.token))
-  }, [dispatch]);
+    dispatch(chatAction.getChat(auth.token));
+
+    socket.on(id, ()=>{
+      console.log(socket.id)
+      console.log('socket on called')
+      dispatch(chatAction.getChat(auth.token))
+      // dispatch(chatAction.privateChat(auth.token, id_sender, id_receiver))
+    })
+    return()=>{
+      socket.close()
+    }
+  }, []);
 
   const chatList = chat.data
   console.log(chatList)
@@ -42,21 +62,26 @@ const Chat = ({navigation}) => {
   const newChat = () => {
     navigation.navigate('Contact')
   }
-  const idToken = jwt_decode(auth.token)
   const searchChat = () => {
     console.log(search)
     setSearch('')
     dispatch(chatAction.searchChat(auth.token, search))
   }
+  // const nextPage = () => {
+  //   if (chat.pageInfo.nextLink!=='') {
+  //     const nextPage = chat.pageInfo.nextLink.slice(21)
+  //     dispatch(chatAction.nextPrevChat(auth.token, nextPage));
+  //   }
+  // };
   const renderItem = ({item}) => (
-    <TouchableOpacity style={style.rowChat} onPress={()=>chatRoom(item.id_sender, item.id_receiver)} key={item.id.toString().concat(item.message)}>
+    <TouchableOpacity style={style.rowChat} onPress={()=>chatRoom(item.id_sender, item.id_receiver)} key={item.id}>
       <View style={style.thumbnailWrap}>
         {item.id_sender===idToken.detailUser.id ? (
           item.receiver.picture===null ? 
             (<Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />) : 
             (<Thumbnail source={{uri: `${API_URL}/${item.receiver.picture}`}} />)
         ) : (
-          item.id_sender.picture===null ? 
+          item.sender.picture===null ? 
             (<Thumbnail source={require('../assets/5fa3e598894a4.jpg')} />) : 
             (<Thumbnail source={{uri: `${API_URL}/${item.sender.picture}`}} />)
         )}
@@ -128,9 +153,9 @@ const Chat = ({navigation}) => {
           keyExtractor={(item) => item.message}
           // numColumns={2}
           // onEndReached={nextPage}
-          // onEndReachedThreshold={0.5}
-          // refreshing={loading}
-          // onRefresh={() => dispatch(homeAction.refreshCatalog())}
+          // onEndReachedThreshold={0.05}
+          refreshing={loading}
+          onRefresh={getData}
         />
       </ScrollView>
     </View>
