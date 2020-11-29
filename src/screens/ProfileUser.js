@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, StyleSheet, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, SafeAreaView} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, ActivityIndicator, Modal, ToastAndroid} from 'react-native';
 import {Thumbnail} from 'native-base'
 import {Header} from 'react-native-elements'
 import Iconic from 'react-native-vector-icons/MaterialIcons';
@@ -36,17 +36,22 @@ class ProfileUser extends Component {
           name: response.fileName,
         });
         this.props.editPicture(this.props.auth.token, form);
+        this.props.getUser(this.props.auth.token)
       }
     });
+  };
+  showToast = () => {
+    ToastAndroid.show(this.props.users.alertMsg, ToastAndroid.SHORT);
   };
   saveEditName = () => {
     const data = { username: this.state.nama }
     // console.log(data)
     this.props.editUser(this.props.auth.token, data)
+    this.props.getUser(this.props.auth.token)
   }
   render() {
     // console.log(this.state)
-    // console.log(this.props)
+    console.log(this.props.users.alertMsg)
     const result = this.props.users.data
     // console.log(result)
     return (
@@ -57,6 +62,13 @@ class ProfileUser extends Component {
           leftComponent={<Iconic onPress={this.register} name='chevron-left' color='#1e90ff' size={28} />}
           centerComponent={{ text: 'Edit Profile', style: { color: 'black' }, }}
         />
+        {this.props.users.isLoading ? (
+          <Modal visible transparent style={{flex:1, justifyContent: 'center', alignItems: 'center',}}>
+            <ActivityIndicator style={{backgroundColor: 'white', opacity: 0.4, height: '100%', width: '100%'}} size="large" color="black" />
+          </Modal>
+        ) : (
+          this.props.users.alertMsg === '' ? (null) : (this.showToast())
+        )}
 
         <View style={style.viewTopWrapper}>
           <View style={style.viewTop}>

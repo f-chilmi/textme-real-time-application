@@ -38,7 +38,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        data: action.payload.data.result
+        data: action.payload.data.result,
+        alertMsg: '',
       }
     }
     case 'ALL_PROFILE_PENDING': {
@@ -65,7 +66,8 @@ export default (state = initialState, action) => {
     case 'EDIT_PENDING': {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        alertMsg: '',
       }
     }
     case 'EDIT_REJECTED': {
@@ -80,7 +82,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        data: action.payload.data.dataUser
+        data: action.payload.data.dataUser,
+        alertMsg: 'Edit profile success'
       }
     }
     default: {
