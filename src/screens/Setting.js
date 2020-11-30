@@ -14,8 +14,8 @@ import Iconic from 'react-native-vector-icons/MaterialIcons';
 import usersAction from '../redux/actions/users';
 import authAction from '../redux/actions/auth';
 import chatAction from '../redux/actions/chat';
-// import {API_URL} from '@env';
-const API_URL = 'http://127.0.0.1:8080'
+import {API_URL} from '@env';
+// const API_URL = 'http://127.0.0.1:8080'
 
 const Setting = ({navigation}) => {
   const dispatch = useDispatch();

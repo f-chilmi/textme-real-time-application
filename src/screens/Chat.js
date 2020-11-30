@@ -14,12 +14,12 @@ import {Icon, Thumbnail} from 'native-base';
 import {SearchBar, Button} from 'react-native-elements';
 import chatAction from '../redux/actions/chat';
 import store from '../redux/store'
-// import {API_URL} from '@env';
+import {API_URL} from '@env';
 import SplashScreen from 'react-native-splash-screen'
 import socket from '../helpers/socket';
 import PushNotification from 'react-native-push-notification'
 import {default as axios} from 'axios';
-const API_URL = 'http://127.0.0.1:8080'
+// const API_URL = 'http://127.0.0.1:8080'
 
 let tokenNotif = ''
 

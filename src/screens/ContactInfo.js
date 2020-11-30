@@ -6,9 +6,9 @@ import Iconic from 'react-native-vector-icons/MaterialIcons'
 import auth from '../redux/actions/auth';
 import chat from '../redux/actions/chat'
 import {connect} from 'react-redux';
-// import {API_URL} from '@env';
+import {API_URL} from '@env';
 import jwt_decode from "jwt-decode"
-const API_URL = 'http://127.0.0.1:8080'
+// const API_URL = 'http://127.0.0.1:8080'
 
 console.log(API_URL)
 

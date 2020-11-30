@@ -7,8 +7,8 @@ import ImagePicker from 'react-native-image-picker';
 import auth from '../redux/actions/auth';
 import users from '../redux/actions/users';
 import {connect} from 'react-redux';
-// import {API_URL} from '@env';
-const API_URL = 'http://127.0.0.1:8080'
+import {API_URL} from '@env';
+// const API_URL = 'http://127.0.0.1:8080'
 
 class ProfileUser extends Component {
   state={
