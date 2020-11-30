@@ -12,8 +12,9 @@ import {Header, SearchBar} from 'react-native-elements'
 import {useSelector, useDispatch} from 'react-redux';
 import usersAction from '../redux/actions/users';
 import chatAction from '../redux/actions/chat';
-import {API_URL} from '@env';
+// import {API_URL} from '@env';
 import jwt_decode from "jwt-decode"
+const API_URL = 'http://127.0.0.1:8080'
 
 const Contact = ({navigation}) => {
   const [search, setSearch] = React.useState('');

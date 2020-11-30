@@ -9,8 +9,9 @@ import {Thumbnail} from 'native-base';
 import {Header} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import chatAction from '../redux/actions/chat';
-import {API_URL} from '@env';
+// import {API_URL} from '@env';
 import socket from '../helpers/socket'
+const API_URL = 'http://127.0.0.1:8080'
 
 const ChatRoom = ({navigation, route}) => {
   const dispatch = useDispatch();

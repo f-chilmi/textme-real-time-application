@@ -2,9 +2,9 @@ import http from '../../helpers/http'
 import qs from 'querystring'
 
 export default {
-  auth: (data) => ({
-    type: 'AUTH_USER',
-    payload: http().post('/auth/register', qs.stringify(data))
+  setTokenNotif: (token, tokenNotif) => ({
+    type: 'TOKEN_NOTIF',
+    payload: http(token).patch('/notif', qs.stringify(tokenNotif))
   }),
   getChat: (token) => ({
     type: 'CHAT_LIST',

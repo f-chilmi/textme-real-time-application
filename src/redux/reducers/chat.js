@@ -34,6 +34,27 @@ export default (state = initialState, action) => {
         user2: {},
       }
     }
+    case 'TOKEN_NOTIF_PENDING': {
+      return {
+        ...state,
+        isLoading: true
+      }
+    }
+    case 'TOKEN_NOTIF_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Failed update token'
+      }
+    }
+    case 'TOKEN_NOTIF_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        alertMsg: ''
+      }
+    }
     case 'CHAT_LIST_PENDING': {
       return {
         ...state,

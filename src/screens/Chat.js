@@ -13,21 +13,64 @@ import jwt_decode from "jwt-decode"
 import {Icon, Thumbnail} from 'native-base';
 import {SearchBar, Button} from 'react-native-elements';
 import chatAction from '../redux/actions/chat';
-import authAction from '../redux/actions/auth';
-import {API_URL} from '@env';
+import store from '../redux/store'
+// import {API_URL} from '@env';
 import SplashScreen from 'react-native-splash-screen'
 import socket from '../helpers/socket';
+import PushNotification from 'react-native-push-notification'
+import {default as axios} from 'axios';
+const API_URL = 'http://127.0.0.1:8080'
+
+let tokenNotif = ''
+
+PushNotification.configure({
+  onRegister: function (token) {
+    // console.log(`Token: ${JSON.stringify(token)}`)
+    // store().store.setItem('TOKEN_NOTIF', JSON.stringify(token))
+    // axios({
+    //   headers: {Authorization: token ? `Bearer ${token}` : undefined},
+    //   method: 'patch',
+    //   url: `${API_URL}/notif`,
+    //   token,
+    // });
+    return tokenNotif = token
+  },
+  onNotification: function (notif) {
+    console.log(`Notif: ${notif}`)
+    PushNotification.localNotification({
+      channelId: 'notif',
+      title: notif.title,
+      message: notif.message,
+      smallIcon: "ic_notification",
+    })
+  },
+  onRegistrationError: function (err) {
+    console.error(err.message, err)
+  }
+})
+
+PushNotification.createChannel(
+  {
+    channelId: 'notif',
+    channelName: 'Notif channel',
+    channelDescription: 'Test',
+    soundName: 'default',
+    importance: 4,
+    vibrate: true
+  },
+  (created) => console.log(`created channel return '${created}'`)
+)
 
 const Chat = ({navigation}) => {
   const dispatch = useDispatch();
   const [search, setSearch] = React.useState('');
   const [loading, setLoading] = useState(false);
-  const [sender, setSender] = useState('')
-  const [receiver, setReceiver] = useState('')
   const chat = useSelector((state) => state.chat);
   const auth = useSelector((state) => state.auth);
   const idToken = jwt_decode(auth.token)
   const { id } = idToken.detailUser
+
+  // console.log(tokenNotif)
 
   const getData = () => {
     dispatch(chatAction.getChat(auth.token))
@@ -35,6 +78,7 @@ const Chat = ({navigation}) => {
 
   useEffect(() => {
     SplashScreen.hide();
+    dispatch(chatAction.setTokenNotif(auth.token, tokenNotif))
     dispatch(chatAction.getChat(auth.token));
 
     socket.on(id, ()=>{
@@ -60,7 +104,7 @@ const Chat = ({navigation}) => {
     navigation.navigate('Contact')
   }
   const searchChat = () => {
-    console.log(search)
+    // console.log(search)
     setSearch('')
     dispatch(chatAction.searchChat(auth.token, search))
   }
